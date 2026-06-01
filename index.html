@@ -152,33 +152,26 @@
           <div class="video-compare columns is-centered is-vcentered">
             <div class="column">
               <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">Baseline &mdash; Aliased, Fails to Start</span></div>
-              <!-- To activate: replace this placeholder div with
-              <div class="video-wrap"><video autoplay muted loop playsinline controls width="100%"
-                poster="static/images/state_alias.png">
-                <source src="static/videos/state_alias_baseline.mp4" type="video/mp4"></video></div> -->
-              <div class="video-wrap placeholder">
-                <i class="fas fa-film"></i>
-                <p>Baseline rollout</p>
-                <span class="fname">static/videos/state_alias_baseline.mp4</span>
+              <div class="video-wrap">
+                <video autoplay muted loop playsinline controls width="100%">
+                  <source src="static/videos/alias_baseline.mp4" type="video/mp4">
+                </video>
               </div>
             </div>
             <div class="column">
               <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours) &mdash; Disambiguates, Succeeds</span></div>
-              <!-- To activate: replace this placeholder div with
-              <div class="video-wrap"><video autoplay muted loop playsinline controls width="100%"
-                poster="static/images/teaser.png">
-                <source src="static/videos/state_alias_ours.mp4" type="video/mp4"></video></div> -->
-              <div class="video-wrap placeholder">
-                <i class="fas fa-film"></i>
-                <p>TEMPO rollout</p>
-                <span class="fname">static/videos/state_alias_ours.mp4</span>
+              <div class="video-wrap">
+                <video autoplay muted loop playsinline controls width="100%">
+                  <source src="static/videos/alias_ours.mp4" type="video/mp4">
+                </video>
               </div>
             </div>
           </div>
           <p class="compare-caption">
-            Reaching for the plate and releasing it look nearly identical from a single frame. The baseline
-            oscillates between the two and never starts; TEMPO's proprioceptive history resolves which phase
-            it is in and completes the task.
+            The approach and retract phases of the gripper look nearly identical from a single frame. With
+            this state aliasing present in the data, the baseline collapses and cannot act; TEMPO's
+            proprioceptive history disambiguates the two phases, so the gripper approaches and retracts
+            normally and completes the task.
           </p>
 
           <br>
@@ -187,33 +180,26 @@
           <h3 class="title is-4 has-text-centered">Moving Target: Miss vs. Catch</h3>
           <div class="video-compare columns is-centered is-vcentered">
             <div class="column">
-              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">Baseline &mdash; Complete Miss</span></div>
-              <!-- To activate: replace this placeholder div with
-              <div class="video-wrap"><video autoplay muted loop playsinline controls width="100%"
-                poster="static/images/task_handover.png">
-                <source src="static/videos/failure_baseline.mp4" type="video/mp4"></video></div> -->
-              <div class="video-wrap placeholder">
-                <i class="fas fa-film"></i>
-                <p>Baseline rollout</p>
-                <span class="fname">static/videos/failure_baseline.mp4</span>
+              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">Baseline &mdash; Fails to Track</span></div>
+              <div class="video-wrap">
+                <video autoplay muted loop playsinline controls width="100%">
+                  <source src="static/videos/track_baseline.mp4" type="video/mp4">
+                </video>
               </div>
             </div>
             <div class="column">
-              <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours) &mdash; Success</span></div>
-              <!-- To activate: replace this placeholder div with
-              <div class="video-wrap"><video autoplay muted loop playsinline controls width="100%"
-                poster="static/images/teaser.png">
-                <source src="static/videos/failure_ours.mp4" type="video/mp4"></video></div> -->
-              <div class="video-wrap placeholder">
-                <i class="fas fa-film"></i>
-                <p>TEMPO rollout</p>
-                <span class="fname">static/videos/failure_ours.mp4</span>
+              <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours) &mdash; Tracks &amp; Catches</span></div>
+              <div class="video-wrap">
+                <video autoplay muted loop playsinline controls width="100%">
+                  <source src="static/videos/track_ours.mp4" type="video/mp4">
+                </video>
               </div>
             </div>
           </div>
           <p class="compare-caption">
-            On Bottle Handover, the baseline reaches for where the bottle was and misses it entirely; TEMPO
-            uses recent motion to anticipate where the bottle will be and catches it on time.
+            The baseline never picks up the object's motion, so its gripper fails to follow the ball and the
+            catch is missed. TEMPO learns the object-motion-to-action correspondence, tracks the appropriate
+            target, and catches it on time.
           </p>
         </div>
       </div>
@@ -428,13 +414,15 @@
 
           <h3 class="title is-4">When a Single Frame Is Not Enough</h3>
           <div class="content has-text-centered">
-            <img src="static/images/state_alias.gif" alt="State-aliased failure" style="max-width: 95%;" />
+            <img src="static/images/state_alias.gif" alt="State-aliased baseline failure" style="max-width: 95%;" />
             <p class="has-text-justified">
-              <b>State aliasing in action.</b> The task is to grip the velcro plate and follow the human
-              hand. A single-frame baseline cannot differentiate reaching out for the plate from releasing
-              it, because the two phases produce nearly identical observations, so it fails to even start the
-              task. This is the artifact that drives both asynchronous baselines to 0% on the full Wine Pour
-              and Flick Catch tasks.
+              <b>State aliasing in action.</b> The approach and retract phases of the gripper produce nearly
+              identical observations, so a single-frame baseline cannot tell them apart and oscillates
+              between reaching and withdrawing, failing to even start the task. This is the artifact that
+              drives both asynchronous baselines to 0% on the full Wine Pour and Flick Catch tasks. TEMPO
+              <b>completely resolves it</b>: with a compact proprioceptive history, the policy knows which
+              phase it is in and the gripper approaches and retracts normally, as shown in the
+              <a href="#rollouts">state-aliasing success rollout above</a>.
             </p>
           </div>
         </div>
