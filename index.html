@@ -28,8 +28,9 @@
     <div class="sidebar-title">Sections</div>
     <ul>
       <li><a href="#abstract" data-target="abstract">Abstract</a></li>
-      <li><a href="#method" data-target="method">Method</a></li>
+      <li><a href="#rollouts" data-target="rollouts">Rollouts</a></li>
       <li><a href="#tasks" data-target="tasks">Tasks</a></li>
+      <li><a href="#method" data-target="method">Method</a></li>
       <li><a href="#results" data-target="results">Results</a></li>
       <li><a href="#analysis" data-target="analysis">Analysis</a></li>
     </ul>
@@ -131,6 +132,143 @@
     </div>
   </section>
 
+  <!-- ==================== REAL-WORLD ROLLOUTS (demos up front) ==================== -->
+  <section class="section" id="rollouts">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3 has-text-centered">Real-World Rollouts</h2>
+          <div class="content has-text-justified">
+            <p>
+              Side-by-side real-robot rollouts of the same task: a state-of-the-art asynchronous baseline
+              versus TEMPO. The baseline cannot tell how the scene is moving or which phase of the task it
+              is in, so it mistimes the grasp or stalls entirely. TEMPO tracks the moving target and commits
+              at the right moment.
+            </p>
+          </div>
+
+          <!-- Pair A: state aliasing -->
+          <h3 class="title is-4 has-text-centered">State Aliasing: Stalls vs. Completes</h3>
+          <div class="video-compare columns is-centered is-vcentered">
+            <div class="column">
+              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">Baseline &mdash; Aliased, Fails to Start</span></div>
+              <!-- To activate: replace this placeholder div with
+              <div class="video-wrap"><video autoplay muted loop playsinline controls width="100%"
+                poster="static/images/state_alias.png">
+                <source src="static/videos/state_alias_baseline.mp4" type="video/mp4"></video></div> -->
+              <div class="video-wrap placeholder">
+                <i class="fas fa-film"></i>
+                <p>Baseline rollout</p>
+                <span class="fname">static/videos/state_alias_baseline.mp4</span>
+              </div>
+            </div>
+            <div class="column">
+              <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours) &mdash; Disambiguates, Succeeds</span></div>
+              <!-- To activate: replace this placeholder div with
+              <div class="video-wrap"><video autoplay muted loop playsinline controls width="100%"
+                poster="static/images/teaser.png">
+                <source src="static/videos/state_alias_ours.mp4" type="video/mp4"></video></div> -->
+              <div class="video-wrap placeholder">
+                <i class="fas fa-film"></i>
+                <p>TEMPO rollout</p>
+                <span class="fname">static/videos/state_alias_ours.mp4</span>
+              </div>
+            </div>
+          </div>
+          <p class="compare-caption">
+            Reaching for the plate and releasing it look nearly identical from a single frame. The baseline
+            oscillates between the two and never starts; TEMPO's proprioceptive history resolves which phase
+            it is in and completes the task.
+          </p>
+
+          <br>
+
+          <!-- Pair B: motion ambiguity / complete miss -->
+          <h3 class="title is-4 has-text-centered">Moving Target: Miss vs. Catch</h3>
+          <div class="video-compare columns is-centered is-vcentered">
+            <div class="column">
+              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">Baseline &mdash; Complete Miss</span></div>
+              <!-- To activate: replace this placeholder div with
+              <div class="video-wrap"><video autoplay muted loop playsinline controls width="100%"
+                poster="static/images/task_handover.png">
+                <source src="static/videos/failure_baseline.mp4" type="video/mp4"></video></div> -->
+              <div class="video-wrap placeholder">
+                <i class="fas fa-film"></i>
+                <p>Baseline rollout</p>
+                <span class="fname">static/videos/failure_baseline.mp4</span>
+              </div>
+            </div>
+            <div class="column">
+              <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours) &mdash; Success</span></div>
+              <!-- To activate: replace this placeholder div with
+              <div class="video-wrap"><video autoplay muted loop playsinline controls width="100%"
+                poster="static/images/teaser.png">
+                <source src="static/videos/failure_ours.mp4" type="video/mp4"></video></div> -->
+              <div class="video-wrap placeholder">
+                <i class="fas fa-film"></i>
+                <p>TEMPO rollout</p>
+                <span class="fname">static/videos/failure_ours.mp4</span>
+              </div>
+            </div>
+          </div>
+          <p class="compare-caption">
+            On Bottle Handover, the baseline reaches for where the bottle was and misses it entirely; TEMPO
+            uses recent motion to anticipate where the bottle will be and catches it on time.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TASKS ==================== -->
+  <section class="section" id="tasks">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Dynamic Tasks</h2>
+          <div class="content has-text-justified">
+            <p>
+              We evaluate on a bimanual platform across four dynamic tasks designed to expose two
+              ambiguities in isolation and combination. Each task is dynamic and shares four properties that
+              a current-frame observation alone cannot resolve: <b>(P1)</b> the target object is
+              <i>moving</i>; <b>(P2)</b> the relevant target <i>shifts</i> during the episode; <b>(P3)</b>
+              the task decomposes into a sequence of subtasks; and <b>(P4)</b> the policy faces
+              <i>state ambiguity</i>, where a perceptually identical state may demand opposite actions
+              depending on what came before.
+            </p>
+          </div>
+
+          <div class="task-grid">
+            <figure>
+              <img src="static/images/task_handover.png" alt="Bottle Handover task" />
+              <figcaption><b>Bottle Handover (P1).</b> The robot intercepts a bottle from a human walking
+                past from either direction, with varied walking speed, height, and pose, so the policy must
+                estimate the bottle's velocity to time and place the grasp.</figcaption>
+            </figure>
+            <figure>
+              <img src="static/images/task_drop.png" alt="Drop Catch task" />
+              <figcaption><b>Drop Catch (P1, P3).</b> After receiving a velcro plate, the robot tracks the
+                human's hand laterally and catches a ball when it is released. The handover-then-track
+                sequence makes this a multi-stage task.</figcaption>
+            </figure>
+            <figure>
+              <img src="static/images/task_flick.png" alt="Flick Catch task" />
+              <figcaption><b>Flick Catch (P1&ndash;P4).</b> The robot picks up a plate, shadows a hovering
+                hand, then switches to tracking a flicked ball to catch it. Because pickup and put-down occur
+                at the same position, they are perceptually aliased, making this the hardest task.</figcaption>
+            </figure>
+            <figure>
+              <img src="static/images/task_pour.png" alt="Wine Pour task" />
+              <figcaption><b>Wine Pour (P1&ndash;P4).</b> The robot pours beads into a pot the human moves
+                around. Pickup and put-down produce visually similar states that require opposite actions,
+                and once pouring begins the target shifts from bottle to moving pot.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ==================== METHOD ==================== -->
   <section class="section" id="method">
     <div class="container is-max-desktop">
@@ -209,63 +347,12 @@
     </div>
   </section>
 
-  <!-- ==================== TASKS ==================== -->
-  <section class="section" id="tasks">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h2 class="title is-3">Dynamic Tasks</h2>
-          <div class="content has-text-justified">
-            <p>
-              We evaluate on a bimanual platform across four dynamic tasks designed to expose two
-              ambiguities in isolation and combination. Each task is dynamic and shares four properties that
-              a current-frame observation alone cannot resolve: <b>(P1)</b> the target object is
-              <i>moving</i>; <b>(P2)</b> the relevant target <i>shifts</i> during the episode; <b>(P3)</b>
-              the task decomposes into a sequence of subtasks; and <b>(P4)</b> the policy faces
-              <i>state ambiguity</i>, where a perceptually identical state may demand opposite actions
-              depending on what came before.
-            </p>
-          </div>
-
-          <div class="task-grid">
-            <figure>
-              <img src="static/images/task_handover.png" alt="Bottle Handover task" />
-              <figcaption><b>Bottle Handover (P1).</b> The robot intercepts a bottle from a human walking
-                past from either direction, with varied walking speed, height, and pose, so the policy must
-                estimate the bottle's velocity to time and place the grasp.</figcaption>
-            </figure>
-            <figure>
-              <img src="static/images/task_drop.png" alt="Drop Catch task" />
-              <figcaption><b>Drop Catch (P1, P3).</b> After receiving a velcro plate, the robot tracks the
-                human's hand laterally and catches a ball when it is released. The handover-then-track
-                sequence makes this a multi-stage task.</figcaption>
-            </figure>
-            <figure>
-              <img src="static/images/task_flick.png" alt="Flick Catch task" />
-              <figcaption><b>Flick Catch (P1&ndash;P4).</b> The robot picks up a plate, shadows a hovering
-                hand, then switches to tracking a flicked ball to catch it. Because pickup and put-down occur
-                at the same position, they are perceptually aliased, making this the hardest task.</figcaption>
-            </figure>
-            <figure>
-              <img src="static/images/task_pour.png" alt="Wine Pour task" />
-              <figcaption><b>Wine Pour (P1&ndash;P4).</b> The robot pours beads into a pot the human moves
-                around. Pickup and put-down produce visually similar states that require opposite actions,
-                and once pouring begins the target shifts from bottle to moving pot.</figcaption>
-            </figure>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ==================== RESULTS ==================== -->
   <section class="section" id="results">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h2 class="title is-3">Results</h2>
-
-          <h3 class="title is-4">Success Rate on Dynamic Tasks</h3>
           <div class="content has-text-justified">
             <p>
               We compare TEMPO against two state-of-the-art asynchronous baselines designed for responsive
@@ -309,75 +396,6 @@
               <span class="improvement">+18%</span> on Flick Catch.
             </p>
           </div>
-
-          <br>
-
-          <h3 class="title is-4">Failure-Mode Breakdown</h3>
-          <div class="content has-text-centered">
-            <img src="static/images/failure_modes.png" alt="Failure-mode breakdown on Bottle Handover" style="max-width: 80%;" />
-            <p class="has-text-justified">
-              <b>Failure-mode breakdown on Bottle Handover.</b> A single success rate hides <i>why</i> a
-              policy fails, so we visually examined all 50 rollouts of each model and labeled every episode as
-              a success or one of three failure modes. The dominant failure for both baselines is
-              <i>Complete Miss</i>, where the arm reaches toward the wrong place and misses the bottle
-              entirely, a clear sign of mispredicting where the moving bottle will be. By conditioning on
-              recent motion, TEMPO cuts Complete Misses and raises success from 19 (VLASH) and 22 (RTC) to 37
-              out of 50.
-            </p>
-          </div>
-
-          <br>
-
-          <h3 class="title is-4">Tracking the Moving Target</h3>
-          <div class="content has-text-centered">
-            <img src="static/images/jittery.png" alt="Robot joint action versus human hand" style="max-width: 95%;" />
-            <p class="has-text-justified">
-              <b>Robot joint action (blue) versus human hand (red).</b> Side-by-side comparison of a Drop
-              Catch rollout from the baseline (VLASH, <i>left</i>) and TEMPO (<i>right</i>). The baseline
-              oscillates left-to-right continuously while the human hand moves in a single direction, whereas
-              TEMPO's trajectory closely aligns with the human's hand motion.
-            </p>
-          </div>
-
-          <br>
-
-          <h3 class="title is-4">Baseline Failure Modes vs. TEMPO</h3>
-          <div class="content has-text-justified">
-            <p>
-              Side-by-side rollouts of the same task. The asynchronous baseline reaches toward the wrong
-              place or commits at the wrong moment, while TEMPO tracks the moving target and grasps on time.
-            </p>
-          </div>
-          <div class="video-compare columns is-centered is-vcentered">
-            <div class="column">
-              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">Baseline &mdash; Complete Miss</span></div>
-              <!-- To activate, drop the file at the path below and replace this placeholder div with:
-              <div class="video-wrap"><video autoplay muted loop playsinline controls width="100%"
-                poster="static/images/failure_modes.png">
-                <source src="static/videos/failure_baseline.mp4" type="video/mp4"></video></div> -->
-              <div class="video-wrap placeholder">
-                <i class="fas fa-film"></i>
-                <p>Baseline rollout</p>
-                <span class="fname">static/videos/failure_baseline.mp4</span>
-              </div>
-            </div>
-            <div class="column">
-              <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours) &mdash; Success</span></div>
-              <!-- To activate, drop the file at the path below and replace this placeholder div with:
-              <div class="video-wrap"><video autoplay muted loop playsinline controls width="100%"
-                poster="static/images/teaser.png">
-                <source src="static/videos/failure_ours.mp4" type="video/mp4"></video></div> -->
-              <div class="video-wrap placeholder">
-                <i class="fas fa-film"></i>
-                <p>TEMPO rollout</p>
-                <span class="fname">static/videos/failure_ours.mp4</span>
-              </div>
-            </div>
-          </div>
-          <p class="compare-caption">
-            On Bottle Handover, the baseline mistimes the grasp and misses the bottle entirely; TEMPO uses
-            recent motion to anticipate where the bottle will be and catches it.
-          </p>
         </div>
       </div>
     </div>
@@ -399,53 +417,9 @@
               moving, corresponding to major movement in the observation, while
               <span class="sig-act">TEMPO<sub>ACT</sub></span> steadily gains attention during the hand-
               following phase and drops back down after the ball is caught. The two signals are consulted at
-              distinct moments: motion during tracking, proprioceptive history at commitment.
-            </p>
-          </div>
-
-          <br>
-
-          <h3 class="title is-4">Does the Policy Internalize Object Motion?</h3>
-          <div class="content has-text-justified">
-            <p>
-              We test whether the trained policy internalizes object motion by probing its hidden state for
-              object velocity. For each task we annotate the per-frame position of the object of interest,
-              compute its pixel-space velocity, and fit an MLP probe from each model's pooled hidden state to
-              this velocity. Higher R&sup2; denotes a stronger correlation between the hidden state and the
-              object's motion.
-            </p>
-          </div>
-          <div class="content">
-            <table class="results-table" style="max-width: 700px; margin: 0 auto;">
-              <thead>
-                <tr>
-                  <th>Method</th>
-                  <th>Bottle Handover</th>
-                  <th>Drop Catch</th>
-                  <th>Flick Catch</th>
-                  <th>Wine Pour</th>
-                  <th>Avg.</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>RTC</td>
-                  <td>0.46</td><td>0.31</td><td>-0.07</td><td>0.06</td><td>0.19</td>
-                </tr>
-                <tr>
-                  <td>VLASH</td>
-                  <td>0.43</td><td>0.28</td><td>0.03</td><td>0.09</td><td>0.21</td>
-                </tr>
-                <tr class="ours-row">
-                  <td><b>TEMPO (Ours)</b></td>
-                  <td><b>0.52</b></td><td><b>0.33</b></td><td><b>0.57</b></td><td><b>0.44</b></td><td><b>0.47</b></td>
-                </tr>
-              </tbody>
-            </table>
-            <p class="has-text-centered" style="font-size:0.9rem; color:#666; margin-top:0.5rem;">
-              MLP probe R&sup2; over object-of-interest velocity from the VLA's aggregated hidden state.
-              Despite identical visual and language inputs, the baselines leave object motion largely
-              unpredictable from their hidden states on the tasks that most demand it, confirming that TEMPO
+              distinct moments: motion during tracking, proprioceptive history at commitment. Probing the
+              policy's hidden state further confirms it encodes object velocity far better than the baselines
+              on the tasks that most demand it (notably Flick Catch and Wine Pour), evidence that TEMPO
               supplies a motion signal the policy actually uses.
             </p>
           </div>
@@ -463,38 +437,6 @@
               and Flick Catch tasks.
             </p>
           </div>
-
-          <div class="video-compare columns is-centered is-vcentered">
-            <div class="column">
-              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">Baseline &mdash; Aliased, Fails to Start</span></div>
-              <!-- To activate, drop the file at the path below and replace this placeholder div with:
-              <div class="video-wrap"><video autoplay muted loop playsinline controls width="100%"
-                poster="static/images/state_alias.png">
-                <source src="static/videos/state_alias_baseline.mp4" type="video/mp4"></video></div> -->
-              <div class="video-wrap placeholder">
-                <i class="fas fa-film"></i>
-                <p>Baseline rollout</p>
-                <span class="fname">static/videos/state_alias_baseline.mp4</span>
-              </div>
-            </div>
-            <div class="column">
-              <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours) &mdash; Disambiguates, Succeeds</span></div>
-              <!-- To activate, drop the file at the path below and replace this placeholder div with:
-              <div class="video-wrap"><video autoplay muted loop playsinline controls width="100%"
-                poster="static/images/teaser.png">
-                <source src="static/videos/state_alias_ours.mp4" type="video/mp4"></video></div> -->
-              <div class="video-wrap placeholder">
-                <i class="fas fa-film"></i>
-                <p>TEMPO rollout</p>
-                <span class="fname">static/videos/state_alias_ours.mp4</span>
-              </div>
-            </div>
-          </div>
-          <p class="compare-caption">
-            Reaching for the plate and releasing it look nearly identical from a single frame. The baseline
-            oscillates between the two and never starts; TEMPO's proprioceptive history resolves which phase
-            it is in and completes the task.
-          </p>
         </div>
       </div>
     </div>
