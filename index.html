@@ -412,40 +412,41 @@
 
           <br>
 
-          <h3 class="title is-4">Failure-Mode Breakdown (Bottle Handover)</h3>
+          <h3 class="title is-4">Failure-Mode Breakdown</h3>
           <div class="content has-text-justified">
             <p>
-              A single success rate hides <i>why</i> a policy fails. We visually examined all 50 Bottle
-              Handover rollouts of each model and labeled every episode as a success or one of three failure
-              modes. The dominant baseline failure is <i>Complete Miss</i>, where the arm reaches toward the
-              wrong place and misses the bottle entirely, a clear sign of mispredicting where the moving
-              bottle will be. <b>Hover over any segment</b> to see what it represents.
+              A single success rate hides <i>why</i> a policy fails. We visually examined all 50 rollouts of
+              each model and labeled every episode as a success or one of several failure modes. Each bar is
+              50 real-robot rollouts; the number inside each segment is its count. <b>Hover over any segment</b>
+              to see what that category means.
             </p>
           </div>
-          <div class="fmbar" id="fmbar">
+
+          <h4 class="title is-5 has-text-centered">Bottle Handover</h4>
+          <div class="fmbar">
             <div class="fmbar-row ours">
               <div class="fmbar-label">TEMPO</div>
               <div class="fmbar-track">
-                <div class="fmbar-seg" style="width:74%;background:#6FB07F" data-mode="Success" data-count="37" data-pct="74">37</div>
-                <div class="fmbar-seg" style="width:6%;background:#EF3B2C" data-mode="Gripper Miss" data-count="3" data-pct="6">3</div>
-                <div class="fmbar-seg" style="width:20%;background:#A50F15" data-mode="Complete Miss" data-count="10" data-pct="20">10</div>
+                <div class="fmbar-seg" style="width:74%;background:#6FB07F" data-mode="Success" data-desc="Task completed: the bottle is caught.">37</div>
+                <div class="fmbar-seg" style="width:6%;background:#EF3B2C" data-mode="Gripper Miss" data-desc="The gripper closes too early or too late.">3</div>
+                <div class="fmbar-seg" style="width:20%;background:#A50F15" data-mode="Complete Miss" data-desc="Robot gripper completely misses the object.">10</div>
               </div>
             </div>
             <div class="fmbar-row">
               <div class="fmbar-label">VLASH</div>
               <div class="fmbar-track">
-                <div class="fmbar-seg" style="width:38%;background:#6FB07F" data-mode="Success" data-count="19" data-pct="38">19</div>
-                <div class="fmbar-seg light" style="width:10%;background:#FCBBA1" data-mode="Near Catch" data-count="5" data-pct="10">5</div>
-                <div class="fmbar-seg" style="width:16%;background:#EF3B2C" data-mode="Gripper Miss" data-count="8" data-pct="16">8</div>
-                <div class="fmbar-seg" style="width:36%;background:#A50F15" data-mode="Complete Miss" data-count="18" data-pct="36">18</div>
+                <div class="fmbar-seg" style="width:38%;background:#6FB07F" data-mode="Success" data-desc="Task completed: the bottle is caught.">19</div>
+                <div class="fmbar-seg light" style="width:10%;background:#FCBBA1" data-mode="Near Catch" data-desc="The side of the gripper grazes the bottle.">5</div>
+                <div class="fmbar-seg" style="width:16%;background:#EF3B2C" data-mode="Gripper Miss" data-desc="The gripper closes too early or too late.">8</div>
+                <div class="fmbar-seg" style="width:36%;background:#A50F15" data-mode="Complete Miss" data-desc="Robot gripper completely misses the object.">18</div>
               </div>
             </div>
             <div class="fmbar-row">
               <div class="fmbar-label">RTC</div>
               <div class="fmbar-track">
-                <div class="fmbar-seg" style="width:44%;background:#6FB07F" data-mode="Success" data-count="22" data-pct="44">22</div>
-                <div class="fmbar-seg light" style="width:8%;background:#FCBBA1" data-mode="Near Catch" data-count="4" data-pct="8">4</div>
-                <div class="fmbar-seg" style="width:48%;background:#A50F15" data-mode="Complete Miss" data-count="24" data-pct="48">24</div>
+                <div class="fmbar-seg" style="width:44%;background:#6FB07F" data-mode="Success" data-desc="Task completed: the bottle is caught.">22</div>
+                <div class="fmbar-seg light" style="width:8%;background:#FCBBA1" data-mode="Near Catch" data-desc="The side of the gripper grazes the bottle.">4</div>
+                <div class="fmbar-seg" style="width:48%;background:#A50F15" data-mode="Complete Miss" data-desc="Robot gripper completely misses the object.">24</div>
               </div>
             </div>
             <div class="fmbar-legend">
@@ -455,12 +456,48 @@
               <span class="key"><i style="background:#A50F15"></i>Complete Miss</span>
             </div>
           </div>
-          <p class="compare-caption">
-            Each bar is 50 real-robot rollouts. TEMPO cuts Complete Misses from 24 (RTC) and 18 (VLASH) to
-            10, raising successes to 37/50. Failure modes: <b>Complete Miss</b> &mdash; the arm reaches to
-            the wrong place and misses entirely; <b>Gripper Miss</b> &mdash; the gripper closes too early or
-            too late; <b>Near Catch</b> &mdash; the side of the gripper grazes the bottle.
-          </p>
+
+          <br>
+
+          <h4 class="title is-5 has-text-centered">Flick Catch</h4>
+          <div class="fmbar">
+            <div class="fmbar-row ours">
+              <div class="fmbar-label">TEMPO</div>
+              <div class="fmbar-track">
+                <div class="fmbar-seg" style="width:66%;background:#6FB07F" data-mode="Success" data-desc="Task completed: plate grabbed, hand tracked, and ball caught.">33</div>
+                <div class="fmbar-seg light" style="width:8%;background:#FDD0A2" data-mode="Failed to Grab Plate" data-desc="Robot fails to pick up the velcro plate at the start.">4</div>
+                <div class="fmbar-seg light" style="width:18%;background:#FDAE6B" data-mode="Lagged Behind Hand" data-desc="Robot follows the hand but trails too far behind to catch in time.">9</div>
+                <div class="fmbar-seg" style="width:4%;background:#FB6A4A" data-mode="Failed to Track Ball" data-desc="Robot does not track the flicked ball's trajectory.">2</div>
+                <div class="fmbar-seg light" style="width:4%;background:#FCBBA1" data-mode="Moved Too Early" data-desc="Robot commits before the ball is flicked off the platform.">2</div>
+              </div>
+            </div>
+            <div class="fmbar-row">
+              <div class="fmbar-label">VLASH</div>
+              <div class="fmbar-track">
+                <div class="fmbar-seg" style="width:20%;background:#6FB07F" data-mode="Success" data-desc="Task completed: plate grabbed, hand tracked, and ball caught.">10</div>
+                <div class="fmbar-seg light" style="width:6%;background:#FDD0A2" data-mode="Failed to Grab Plate" data-desc="Robot fails to pick up the velcro plate at the start.">3</div>
+                <div class="fmbar-seg" style="width:74%;background:#A50F15" data-mode="Failed to React to Hand" data-desc="Robot does not respond to the hand's motion at all.">37</div>
+              </div>
+            </div>
+            <div class="fmbar-row">
+              <div class="fmbar-label">RTC</div>
+              <div class="fmbar-track">
+                <div class="fmbar-seg" style="width:48%;background:#6FB07F" data-mode="Success" data-desc="Task completed: plate grabbed, hand tracked, and ball caught.">24</div>
+                <div class="fmbar-seg light" style="width:14%;background:#FDAE6B" data-mode="Lagged Behind Hand" data-desc="Robot follows the hand but trails too far behind to catch in time.">7</div>
+                <div class="fmbar-seg" style="width:34%;background:#FB6A4A" data-mode="Failed to Track Ball" data-desc="Robot does not track the flicked ball's trajectory.">17</div>
+                <div class="fmbar-seg" style="width:4%;background:#6BAED6" data-mode="Overshoot" data-desc="Robot overshoots the ball's trajectory and misses.">2</div>
+              </div>
+            </div>
+            <div class="fmbar-legend">
+              <span class="key"><i style="background:#6FB07F"></i>Success</span>
+              <span class="key"><i style="background:#FDD0A2"></i>Failed to Grab Plate</span>
+              <span class="key"><i style="background:#FDAE6B"></i>Lagged Behind Hand</span>
+              <span class="key"><i style="background:#FB6A4A"></i>Failed to Track Ball</span>
+              <span class="key"><i style="background:#A50F15"></i>Failed to React to Hand</span>
+              <span class="key"><i style="background:#FCBBA1"></i>Moved Too Early</span>
+              <span class="key"><i style="background:#6BAED6"></i>Overshoot</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -587,8 +624,7 @@
       if (fmTip) {
         document.querySelectorAll('.fmbar-seg').forEach(seg => {
           seg.addEventListener('mouseenter', () => {
-            fmTip.innerHTML = '<b>' + seg.dataset.mode + '</b><br>' +
-              seg.dataset.count + ' / 50 rollouts (' + seg.dataset.pct + '%)';
+            fmTip.innerHTML = '<b>' + seg.dataset.mode + '</b><br>' + seg.dataset.desc;
             fmTip.style.opacity = '1';
           });
           seg.addEventListener('mousemove', e => {
