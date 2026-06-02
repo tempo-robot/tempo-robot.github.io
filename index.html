@@ -465,37 +465,32 @@
               <div class="fmbar-label">TEMPO</div>
               <div class="fmbar-track">
                 <div class="fmbar-seg" style="width:66%;background:#6FB07F" data-mode="Success" data-desc="Task completed: plate grabbed, hand tracked, and ball caught.">33</div>
-                <div class="fmbar-seg light" style="width:8%;background:#FDD0A2" data-mode="Failed to Grab Plate" data-desc="Robot fails to pick up the velcro plate at the start.">4</div>
-                <div class="fmbar-seg light" style="width:18%;background:#FDAE6B" data-mode="Lagged Behind Hand" data-desc="Robot follows the hand but trails too far behind to catch in time.">9</div>
-                <div class="fmbar-seg" style="width:4%;background:#FB6A4A" data-mode="Failed to Track Ball" data-desc="Robot does not track the flicked ball's trajectory.">2</div>
-                <div class="fmbar-seg light" style="width:4%;background:#FCBBA1" data-mode="Moved Too Early" data-desc="Robot commits before the ball is flicked off the platform.">2</div>
+                <div class="fmbar-seg light" style="width:8%;background:#FDD0A2" data-mode="Failed to Grab Plate" data-desc="Stage 1: robot fails to pick up the velcro plate.">4</div>
+                <div class="fmbar-seg" style="width:18%;background:#FB6A4A" data-mode="Failed to Track Hand" data-desc="Stage 2: robot fails to follow the human hand (no reaction or lagging behind).">9</div>
+                <div class="fmbar-seg" style="width:8%;background:#A50F15" data-mode="Failed to Catch Ball" data-desc="Stage 3: robot fails to catch the flicked ball (mistracks, moves early, or overshoots).">4</div>
               </div>
             </div>
             <div class="fmbar-row">
               <div class="fmbar-label">VLASH</div>
               <div class="fmbar-track">
                 <div class="fmbar-seg" style="width:20%;background:#6FB07F" data-mode="Success" data-desc="Task completed: plate grabbed, hand tracked, and ball caught.">10</div>
-                <div class="fmbar-seg light" style="width:6%;background:#FDD0A2" data-mode="Failed to Grab Plate" data-desc="Robot fails to pick up the velcro plate at the start.">3</div>
-                <div class="fmbar-seg" style="width:74%;background:#A50F15" data-mode="Failed to React to Hand" data-desc="Robot does not respond to the hand's motion at all.">37</div>
+                <div class="fmbar-seg light" style="width:6%;background:#FDD0A2" data-mode="Failed to Grab Plate" data-desc="Stage 1: robot fails to pick up the velcro plate.">3</div>
+                <div class="fmbar-seg" style="width:74%;background:#FB6A4A" data-mode="Failed to Track Hand" data-desc="Stage 2: robot fails to follow the human hand (no reaction or lagging behind).">37</div>
               </div>
             </div>
             <div class="fmbar-row">
               <div class="fmbar-label">RTC</div>
               <div class="fmbar-track">
                 <div class="fmbar-seg" style="width:48%;background:#6FB07F" data-mode="Success" data-desc="Task completed: plate grabbed, hand tracked, and ball caught.">24</div>
-                <div class="fmbar-seg light" style="width:14%;background:#FDAE6B" data-mode="Lagged Behind Hand" data-desc="Robot follows the hand but trails too far behind to catch in time.">7</div>
-                <div class="fmbar-seg" style="width:34%;background:#FB6A4A" data-mode="Failed to Track Ball" data-desc="Robot does not track the flicked ball's trajectory.">17</div>
-                <div class="fmbar-seg" style="width:4%;background:#6BAED6" data-mode="Overshoot" data-desc="Robot overshoots the ball's trajectory and misses.">2</div>
+                <div class="fmbar-seg" style="width:14%;background:#FB6A4A" data-mode="Failed to Track Hand" data-desc="Stage 2: robot fails to follow the human hand (no reaction or lagging behind).">7</div>
+                <div class="fmbar-seg" style="width:38%;background:#A50F15" data-mode="Failed to Catch Ball" data-desc="Stage 3: robot fails to catch the flicked ball (mistracks, moves early, or overshoots).">19</div>
               </div>
             </div>
             <div class="fmbar-legend">
               <span class="key"><i style="background:#6FB07F"></i>Success</span>
-              <span class="key"><i style="background:#FDD0A2"></i>Failed to Grab Plate</span>
-              <span class="key"><i style="background:#FDAE6B"></i>Lagged Behind Hand</span>
-              <span class="key"><i style="background:#FB6A4A"></i>Failed to Track Ball</span>
-              <span class="key"><i style="background:#A50F15"></i>Failed to React to Hand</span>
-              <span class="key"><i style="background:#FCBBA1"></i>Moved Too Early</span>
-              <span class="key"><i style="background:#6BAED6"></i>Overshoot</span>
+              <span class="key"><i style="background:#FDD0A2"></i>Failed to Grab Plate (stage 1)</span>
+              <span class="key"><i style="background:#FB6A4A"></i>Failed to Track Hand (stage 2)</span>
+              <span class="key"><i style="background:#A50F15"></i>Failed to Catch Ball (stage 3)</span>
             </div>
           </div>
         </div>
