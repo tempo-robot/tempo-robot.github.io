@@ -201,6 +201,33 @@
             catch is missed. TEMPO learns the object-motion-to-action correspondence, tracks the appropriate
             target, and catches it on time.
           </p>
+
+          <br>
+
+          <!-- Pair C: bottle handover -->
+          <h3 class="title is-4 has-text-centered">Bottle Handover: Miss vs. Catch</h3>
+          <div class="video-compare columns is-centered is-vcentered">
+            <div class="column">
+              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">Baseline &mdash; Complete Miss</span></div>
+              <div class="video-wrap">
+                <video autoplay muted loop playsinline controls width="100%">
+                  <source src="static/videos/bottle_baseline.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+            <div class="column">
+              <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours) &mdash; Catches</span></div>
+              <div class="video-wrap">
+                <video autoplay muted loop playsinline controls width="100%">
+                  <source src="static/videos/bottle_ours.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <p class="compare-caption">
+            Receiving a bottle from a walking person. The baseline reaches for where the bottle was and
+            misses it entirely; TEMPO estimates the bottle's velocity and times the grasp to intercept it.
+          </p>
         </div>
       </div>
     </div>
@@ -382,6 +409,58 @@
               <span class="improvement">+18%</span> on Flick Catch.
             </p>
           </div>
+
+          <br>
+
+          <h3 class="title is-4">Failure-Mode Breakdown (Bottle Handover)</h3>
+          <div class="content has-text-justified">
+            <p>
+              A single success rate hides <i>why</i> a policy fails. We visually examined all 50 Bottle
+              Handover rollouts of each model and labeled every episode as a success or one of three failure
+              modes. The dominant baseline failure is <i>Complete Miss</i>, where the arm reaches toward the
+              wrong place and misses the bottle entirely, a clear sign of mispredicting where the moving
+              bottle will be. <b>Hover over any segment</b> to see what it represents.
+            </p>
+          </div>
+          <div class="fmbar" id="fmbar">
+            <div class="fmbar-row ours">
+              <div class="fmbar-label">TEMPO</div>
+              <div class="fmbar-track">
+                <div class="fmbar-seg" style="width:74%;background:#6FB07F" data-mode="Success" data-count="37" data-pct="74">37</div>
+                <div class="fmbar-seg" style="width:6%;background:#EF3B2C" data-mode="Gripper Miss" data-count="3" data-pct="6">3</div>
+                <div class="fmbar-seg" style="width:20%;background:#A50F15" data-mode="Complete Miss" data-count="10" data-pct="20">10</div>
+              </div>
+            </div>
+            <div class="fmbar-row">
+              <div class="fmbar-label">VLASH</div>
+              <div class="fmbar-track">
+                <div class="fmbar-seg" style="width:38%;background:#6FB07F" data-mode="Success" data-count="19" data-pct="38">19</div>
+                <div class="fmbar-seg light" style="width:10%;background:#FCBBA1" data-mode="Near Catch" data-count="5" data-pct="10">5</div>
+                <div class="fmbar-seg" style="width:16%;background:#EF3B2C" data-mode="Gripper Miss" data-count="8" data-pct="16">8</div>
+                <div class="fmbar-seg" style="width:36%;background:#A50F15" data-mode="Complete Miss" data-count="18" data-pct="36">18</div>
+              </div>
+            </div>
+            <div class="fmbar-row">
+              <div class="fmbar-label">RTC</div>
+              <div class="fmbar-track">
+                <div class="fmbar-seg" style="width:44%;background:#6FB07F" data-mode="Success" data-count="22" data-pct="44">22</div>
+                <div class="fmbar-seg light" style="width:8%;background:#FCBBA1" data-mode="Near Catch" data-count="4" data-pct="8">4</div>
+                <div class="fmbar-seg" style="width:48%;background:#A50F15" data-mode="Complete Miss" data-count="24" data-pct="48">24</div>
+              </div>
+            </div>
+            <div class="fmbar-legend">
+              <span class="key"><i style="background:#6FB07F"></i>Success</span>
+              <span class="key"><i style="background:#FCBBA1"></i>Near Catch</span>
+              <span class="key"><i style="background:#EF3B2C"></i>Gripper Miss</span>
+              <span class="key"><i style="background:#A50F15"></i>Complete Miss</span>
+            </div>
+          </div>
+          <p class="compare-caption">
+            Each bar is 50 real-robot rollouts. TEMPO cuts Complete Misses from 24 (RTC) and 18 (VLASH) to
+            10, raising successes to 37/50. Failure modes: <b>Complete Miss</b> &mdash; the arm reaches to
+            the wrong place and misses entirely; <b>Gripper Miss</b> &mdash; the gripper closes too early or
+            too late; <b>Near Catch</b> &mdash; the side of the gripper grazes the bottle.
+          </p>
         </div>
       </div>
     </div>
@@ -429,6 +508,9 @@
       </div>
     </div>
   </section>
+
+  <!-- Tooltip for the interactive failure-mode chart -->
+  <div id="fmbar-tooltip" class="fmbar-tooltip"></div>
 
   <!-- ==================== FOOTER ==================== -->
   <footer class="footer">
@@ -499,6 +581,25 @@
           setTimeout(() => { clickLock = false; }, 800);
         });
       });
+
+      // Interactive failure-mode bar chart: hover a segment -> tooltip
+      const fmTip = document.getElementById('fmbar-tooltip');
+      if (fmTip) {
+        document.querySelectorAll('.fmbar-seg').forEach(seg => {
+          seg.addEventListener('mouseenter', () => {
+            fmTip.innerHTML = '<b>' + seg.dataset.mode + '</b><br>' +
+              seg.dataset.count + ' / 50 rollouts (' + seg.dataset.pct + '%)';
+            fmTip.style.opacity = '1';
+          });
+          seg.addEventListener('mousemove', e => {
+            fmTip.style.left = e.clientX + 'px';
+            fmTip.style.top = e.clientY + 'px';
+          });
+          seg.addEventListener('mouseleave', () => {
+            fmTip.style.opacity = '0';
+          });
+        });
+      }
     });
   </script>
 
