@@ -286,68 +286,18 @@
 
           <div class="content has-text-justified method-figure">
             <img src="static/images/method.png" alt="TEMPO Architecture" />
-            <p>
-              <b>TEMPO architecture.</b> TEMPO augments a VLM-based policy with two inputs derived from
-              recent history. A general <i>motion encoder</i> compresses a window of past observations into
-              a compact object-motion token that encodes global scene flow, while the robot's recent
-              proprioceptive history is mean-pooled into a compact summary of past joint states. The action
-              expert cross-attends each hidden layer of the VLM representation; the proprioceptive summary
-              conditions the denoising computation through adaptive RMS normalization, gating each layer's
-              attention and MLP norms with learned scale factors.
-            </p>
           </div>
 
           <div class="content has-text-justified">
             <p>
-              TEMPO targets the two representational failure modes with two compact signals, each closing a
-              distinct gap and attaching to a pretrained VLA as a plug-and-play addition with near-zero
-              overhead.
-            </p>
-
-            <h3 class="title is-4"><span class="sig-mot">TEMPO<sub>MOT</sub></span>: Scene Motion Encoding</h3>
-            <p>
-              <span class="sig-mot">TEMPO<sub>MOT</sub></span> summarizes how the scene has been moving,
-              resolving motion ambiguity for fast, shifting targets. A motion-focused encoding does not
-              emerge from stacking frames alone: a model compressing a near-static window still spends most
-              of its capacity on appearance. We instead source the motion code from encoders purpose-built
-              to isolate motion, either by decoupling it from scene structure or by training on dense pixel
-              correspondence and optical flow. The encoder is kept <i>object-agnostic</i>: it operates on
-              the full frame with no detector, tracker, or per-frame prompt, so a single fixed encoder
-              transfers across tasks and to unseen objects. We instantiate it with a frozen pretrained video
-              foundation model in streaming mode, applied off the shelf with no motion-specific fine-tuning;
-              the backbone is a swappable component.
-            </p>
-
-            <h3 class="title is-4"><span class="sig-act">TEMPO<sub>ACT</sub></span>: Proprioceptive History Encoding</h3>
-            <p>
-              Where <span class="sig-mot">TEMPO<sub>MOT</sub></span> resolves <i>what is moving</i>,
-              <span class="sig-act">TEMPO<sub>ACT</sub></span> resolves <i>what the robot has been doing</i>.
-              A compact summary of recent joint history gives the policy the temporal context it needs to
-              commit to the correct task phase rather than hedging at each ambiguous frame. Raw joint history
-              is long, high-frequency, and largely redundant, so we partition the most recent joint positions
-              into contiguous time buckets and summarize each bucket by its mean. The resulting summary is
-              fixed-size regardless of how far back it reaches: extending the horizon changes the bucket
-              length, not the token count. The aggregation is parameter-free and keeps the low-frequency trend
-              that encodes the end-effector's recent motion, while adding negligible context and compute.
-            </p>
-
-            <h3 class="title is-4">Integration and Real-Time Deployment</h3>
-            <p>
-              The motion code is projected to a single token placed in the VLM input alongside the current
-              observation and the language instruction, where the action expert reads it by cross-attention.
-              The proprioceptive bucket tokens are mean-pooled into a conditioning vector that gates each
-              action-expert layer's normalization, reaching the action expert directly without passing through
-              the VLM token stream. The added projections are zero-initialized, so fine-tuning starts from the
-              pretrained policy and reuses its original flow-matching objective unchanged, with no auxiliary
-              loss and no new prediction head.
-            </p>
-            <p>
-              To keep motion encoding off the critical path, we run it in a dedicated background thread,
-              fully decoupled from the control loop. The encoder consumes camera frames at sensor rate and
-              continuously refreshes a shared snapshot of the latest motion tokens; each control tick the
-              policy reads only this snapshot, so the encoder's cost is hidden behind policy inference rather
-              than added to it. The only latency the policy actually pays is the cost of attending over a few
-              extra prefix tokens.
+              TEMPO adds two compact temporal signals to a frozen VLA, each fixing one failure mode with
+              near-zero overhead and no architectural change.
+              <span class="sig-mot"><b>TEMPO<sub>MOT</sub></b></span> is an object-agnostic motion token from
+              a frozen video foundation model that summarizes how the scene is moving, fixing motion
+              ambiguity. <span class="sig-act"><b>TEMPO<sub>ACT</sub></b></span> is a compact summary of the
+              robot's recent joint history that tells the policy which task phase it is in, fixing state
+              aliasing. Motion encoding runs in a background thread, so it adds essentially no inference-time
+              cost.
             </p>
           </div>
         </div>
