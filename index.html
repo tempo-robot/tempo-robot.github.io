@@ -184,7 +184,8 @@
             The approach and retract phases of the gripper look nearly identical from a single frame. With
             this state aliasing present in the data, the baseline collapses and cannot act; TEMPO's
             proprioceptive history disambiguates the two phases, so the gripper approaches and retracts
-            normally and completes the task.
+            normally and completes the task. See a deeper dive in
+            <a href="#state-aliasing">State Aliasing in Decision Making</a>.
           </p>
 
           <br>
@@ -437,7 +438,7 @@
 
           <br>
 
-          <h3 class="title is-4">When a Single Frame Is Not Enough</h3>
+          <h3 class="title is-4" id="state-aliasing">State Aliasing in Decision Making</h3>
           <div class="content has-text-centered">
             <img src="static/images/state_alias.gif" alt="State-aliased baseline failure" style="max-width: 95%;" />
             <p class="has-text-justified">
