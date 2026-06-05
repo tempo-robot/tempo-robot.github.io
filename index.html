@@ -28,8 +28,8 @@
     <div class="sidebar-title">Sections</div>
     <ul>
       <li><a href="#abstract" data-target="abstract">Abstract</a></li>
-      <li><a href="#rollouts" data-target="rollouts">Rollouts</a></li>
       <li><a href="#tasks" data-target="tasks">Tasks</a></li>
+      <li><a href="#rollouts" data-target="rollouts">Rollouts</a></li>
       <li><a href="#method" data-target="method">Method</a></li>
       <li><a href="#results" data-target="results">Results</a></li>
       <li><a href="#analysis" data-target="analysis">Analysis</a></li>
@@ -121,6 +121,30 @@
               analyses confirm that each signal is individually necessary, suggesting that what limits VLAs
               in dynamic settings is not model capacity but the right temporal context.
             </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TASKS ==================== -->
+  <section class="section" id="tasks">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3 has-text-centered">Dynamic Tasks</h2>
+          <div class="content has-text-justified">
+            <p>
+              We evaluate on a bimanual platform across four dynamic tasks &mdash; Bottle Handover, Drop
+              Catch, Flick Catch, and Wine Pour &mdash; each with a moving target and sequential subtasks
+              that a single-frame observation cannot resolve.
+            </p>
+          </div>
+          <div class="content has-text-centered">
+            <video autoplay muted loop playsinline controls
+                   style="max-width:100%; display:block; margin:0 auto; border-radius:6px;">
+              <source src="static/videos/task_setup.mp4" type="video/mp4">
+            </video>
           </div>
         </div>
       </div>
@@ -223,55 +247,6 @@
             Receiving a bottle from a walking person. The baseline reaches for where the bottle was and
             misses it entirely; TEMPO estimates the bottle's velocity and times the grasp to intercept it.
           </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== TASKS ==================== -->
-  <section class="section" id="tasks">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h2 class="title is-3">Dynamic Tasks</h2>
-          <div class="content has-text-justified">
-            <p>
-              We evaluate on a bimanual platform across four dynamic tasks designed to expose two
-              ambiguities in isolation and combination. Each task is dynamic and shares four properties that
-              a current-frame observation alone cannot resolve: <b>(P1)</b> the target object is
-              <i>moving</i>; <b>(P2)</b> the relevant target <i>shifts</i> during the episode; <b>(P3)</b>
-              the task decomposes into a sequence of subtasks; and <b>(P4)</b> the policy faces
-              <i>state ambiguity</i>, where a perceptually identical state may demand opposite actions
-              depending on what came before.
-            </p>
-          </div>
-
-          <div class="task-grid">
-            <figure>
-              <img src="static/images/task_handover.png" alt="Bottle Handover task" />
-              <figcaption><b>Bottle Handover (P1).</b> The robot intercepts a bottle from a human walking
-                past from either direction, with varied walking speed, height, and pose, so the policy must
-                estimate the bottle's velocity to time and place the grasp.</figcaption>
-            </figure>
-            <figure>
-              <img src="static/images/task_drop.png" alt="Drop Catch task" />
-              <figcaption><b>Drop Catch (P1, P3).</b> After receiving a velcro plate, the robot tracks the
-                human's hand laterally and catches a ball when it is released. The handover-then-track
-                sequence makes this a multi-stage task.</figcaption>
-            </figure>
-            <figure>
-              <img src="static/images/task_flick.png" alt="Flick Catch task" />
-              <figcaption><b>Flick Catch (P1&ndash;P4).</b> The robot picks up a plate, shadows a hovering
-                hand, then switches to tracking a flicked ball to catch it. Because pickup and put-down occur
-                at the same position, they are perceptually aliased, making this the hardest task.</figcaption>
-            </figure>
-            <figure>
-              <img src="static/images/task_pour.png" alt="Wine Pour task" />
-              <figcaption><b>Wine Pour (P1&ndash;P4).</b> The robot pours beads into a pot the human moves
-                around. Pickup and put-down produce visually similar states that require opposite actions,
-                and once pouring begins the target shifts from bottle to moving pot.</figcaption>
-            </figure>
-          </div>
         </div>
       </div>
     </div>
