@@ -494,3 +494,12 @@ body {
   z-index: 2000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
+
+/* ===== Cross-reference tags linking webpage blocks to the paper ===== */
+.paper-ref {
+  font-size: 0.8rem;
+  color: #9a9a9a;
+  font-style: italic;
+  margin-top: 0.4rem;
+  text-align: center;
+}
