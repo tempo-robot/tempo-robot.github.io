@@ -425,14 +425,16 @@
           <h3 class="title is-4">Does the Policy Encode Object Motion?</h3>
           <div class="content has-text-justified">
             <p>
-              In each frame we annotate the object of interest and its velocity
-              (<span style="color:#caa400;"><b>yellow dot</b></span>,
-              <span style="color:#e63a3a;"><b>red arrow</b></span>). A probe then predicts this velocity from
-              each model's aggregated hidden state; a higher R² means the representation encodes object motion.
+              For each task we trace the object of interest's trajectory over the past 16 frames
+              (<span style="color:#5078ff;"><b>blue</b></span> = 16 frames ago &rarr;
+              <span style="color:#e63a3a;"><b>red</b></span> = now;
+              <span style="color:#caa400;"><b>yellow dot</b></span> = current position). A probe then predicts
+              this motion from each model's aggregated hidden state; a higher R² means the representation
+              encodes object motion.
             </p>
           </div>
           <div class="content has-text-centered">
-            <img src="static/images/gt_velocity.png" alt="Ground-truth object velocity per task" style="max-width:90%;border-radius:6px;" />
+            <img src="static/images/gt_velocity.png" alt="Ground-truth 16-frame object trajectory per task" style="max-width:100%;border-radius:6px;" />
           </div>
           <div class="content">
             <table class="results-table" style="max-width:700px;margin:0 auto;">
