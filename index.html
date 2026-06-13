@@ -426,27 +426,27 @@
           <div class="content has-text-justified">
             <p>
               What does the motion signal actually encode? We fit a linear probe to recover the object's
-              <i>recent motion</i> &mdash; its image-space displacement over the past 16 frames, the window the
-              motion encoder summarizes &mdash; from each model's hidden state. Each arrow starts at the tracked
-              object (<span style="color:#caa400;"><b>yellow dot</b></span>):
+              <i>recent trajectory</i> &mdash; its image-space path over the past 16 frames, the window the
+              motion encoder summarizes &mdash; from each model's hidden state. Each curve traces that recovered
+              path, ending at the tracked object now (<span style="color:#caa400;"><b>yellow dot</b></span>):
               <span style="background:#fff;border:1px solid #888;padding:0 6px;border-radius:3px;"><b>white</b></span>
-              is the ground-truth recent motion,
+              is the ground-truth path,
               <b style="color:#1f9d44;">green</b> is recovered from
               <span class="sig-mot">TEMPO<sub>MOT</sub></span>'s motion latent, and
               <span style="color:#e63a3a;"><b>red</b></span> from the no-motion baseline's hidden state. TEMPO's
-              latent reconstructs the recent motion closely (green tracks white); the baseline's recovery is
-              less faithful, indicating the motion signal carries object dynamics the backbone otherwise lacks. Frames are chosen to be representative (per-frame error near each model’s median); numbers below are the median recovery error over all windows (lower is better).
+              latent reconstructs the recent trajectory closely (green tracks white); the baseline's recovery is
+              less faithful, indicating the motion signal carries object dynamics the backbone otherwise lacks. Frames are chosen to be representative (per-frame path error near each model’s median); numbers below are the median path-recovery error over all windows (lower is better).
             </p>
           </div>
           <div class="content has-text-centered">
             <img src="static/images/velprobe_dynamic_pour.png" alt="Recent-motion decoding, Wine Pour" style="max-width:100%;border-radius:6px;" />
-            <p class="compare-caption"><b>Wine Pour</b> &mdash; typical recovery error: TEMPO 9px vs. baseline 14px.</p>
+            <p class="compare-caption"><b>Wine Pour</b> &mdash; median path error: TEMPO 6px vs. baseline 7px.</p>
             <img src="static/images/velprobe_spartan.png" alt="Recent-motion decoding, Flick Catch" style="max-width:100%;border-radius:6px;margin-top:0.7rem;" />
-            <p class="compare-caption"><b>Flick Catch</b> &mdash; typical recovery error: TEMPO 27px vs. baseline 35px.</p>
+            <p class="compare-caption"><b>Flick Catch</b> &mdash; median path error: TEMPO 14px vs. baseline 18px.</p>
             <img src="static/images/velprobe_ball_drop.png" alt="Recent-motion decoding, Drop Catch" style="max-width:100%;border-radius:6px;margin-top:0.7rem;" />
-            <p class="compare-caption"><b>Drop Catch</b> &mdash; typical recovery error: TEMPO 23px vs. baseline 35px.</p>
+            <p class="compare-caption"><b>Drop Catch</b> &mdash; median path error: TEMPO 13px vs. baseline 19px.</p>
             <img src="static/images/velprobe_handover.png" alt="Recent-motion decoding, Bottle Handover" style="max-width:100%;border-radius:6px;margin-top:0.7rem;" />
-            <p class="compare-caption"><b>Bottle Handover</b> &mdash; typical recovery error: TEMPO 25px vs. baseline 35px.</p>
+            <p class="compare-caption"><b>Bottle Handover</b> &mdash; median path error: TEMPO 16px vs. baseline 20px.</p>
           </div>
           <p class="paper-ref">Paper: Tab. 3 (motion probe), Sec. 5; motion-encoder probe Tab. A2, App. E.</p>
 
