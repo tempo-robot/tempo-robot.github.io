@@ -132,7 +132,7 @@
           <h2 class="title is-3 has-text-centered">Real-World Rollouts</h2>
           <div class="content has-text-justified">
             <p>
-              Side-by-side real-robot rollouts of the same task: the state-of-the-art asynchronous method
+              Side-by-side real-robot rollouts of the same task: the asynchronous method
               <a href="https://github.com/mit-han-lab/vlash" target="_blank" rel="noopener">VLASH</a>
               versus TEMPO. VLASH cannot tell how the scene is moving or which phase of the task it
               is in, so it mistimes the grasp or stalls entirely. TEMPO tracks the moving target and commits
@@ -162,7 +162,7 @@
           </div>
           <p class="compare-caption">
             The approach and retract phases of the gripper look nearly identical from a single frame. With
-            this state aliasing present in the data, VLASH collapses and cannot act; TEMPO's
+            this state aliasing present in the demonstrations, VLASH collapses and cannot act; TEMPO's
             proprioceptive history disambiguates the two phases, so the gripper approaches and retracts
             normally and completes the task. See a deeper dive in
             <a href="#state-aliasing">State Aliasing in Decision Making</a>.
@@ -267,7 +267,7 @@
           <h2 class="title is-3">Results</h2>
           <div class="content has-text-justified">
             <p>
-              We compare TEMPO against two state-of-the-art asynchronous methods, RTC and VLASH, designed for responsive
+              We compare TEMPO against two asynchronous methods, RTC and VLASH, designed for responsive
               execution. Each entry is the percentage of 50 real-robot rollouts in which the policy completes
               the task, evaluated under varied object speeds, appearances, and approach directions. For Wine
               Pour we report the percentage of "wine" mass retained in the pot at the end of the pour.
@@ -316,7 +316,7 @@
           <div class="content has-text-justified">
             <p>
               A single success rate hides <i>why</i> a policy fails. We visually examined all 50 rollouts of
-              each model and labeled every episode as a success or one of several failure modes. Each bar is
+              RTC, VLASH, and TEMPO and labeled every episode as a success or one of several failure modes. Each bar is
               50 real-robot rollouts; the number inside each segment is its count. <b>Hover over any segment</b>
               to see what that category means.
             </p>
