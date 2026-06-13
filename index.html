@@ -435,18 +435,18 @@
               <span class="sig-mot">TEMPO<sub>MOT</sub></span>'s motion latent, and
               <span style="color:#e63a3a;"><b>red</b></span> from the no-motion baseline's hidden state. TEMPO's
               latent reconstructs the recent motion closely (green tracks white); the baseline's recovery is
-              less faithful, indicating the motion signal carries object dynamics the backbone otherwise lacks.
+              less faithful, indicating the motion signal carries object dynamics the backbone otherwise lacks. Frames are chosen to be representative (per-frame error near each model’s median); numbers below are the median recovery error over all windows (lower is better).
             </p>
           </div>
           <div class="content has-text-centered">
             <img src="static/images/velprobe_dynamic_pour.png" alt="Recent-motion decoding, Wine Pour" style="max-width:100%;border-radius:6px;" />
-            <p class="compare-caption"><b>Wine Pour</b> &mdash; in-sample probe R²: TEMPO 0.90, baseline 0.79.</p>
+            <p class="compare-caption"><b>Wine Pour</b> &mdash; typical recovery error: TEMPO 9px vs. baseline 14px.</p>
             <img src="static/images/velprobe_spartan.png" alt="Recent-motion decoding, Flick Catch" style="max-width:100%;border-radius:6px;margin-top:0.7rem;" />
-            <p class="compare-caption"><b>Flick Catch</b> &mdash; in-sample probe R²: TEMPO 0.65, baseline 0.43.</p>
+            <p class="compare-caption"><b>Flick Catch</b> &mdash; typical recovery error: TEMPO 27px vs. baseline 35px.</p>
             <img src="static/images/velprobe_ball_drop.png" alt="Recent-motion decoding, Drop Catch" style="max-width:100%;border-radius:6px;margin-top:0.7rem;" />
-            <p class="compare-caption"><b>Drop Catch</b> &mdash; in-sample probe R²: TEMPO 0.67, baseline 0.48.</p>
+            <p class="compare-caption"><b>Drop Catch</b> &mdash; typical recovery error: TEMPO 23px vs. baseline 35px.</p>
             <img src="static/images/velprobe_handover.png" alt="Recent-motion decoding, Bottle Handover" style="max-width:100%;border-radius:6px;margin-top:0.7rem;" />
-            <p class="compare-caption"><b>Bottle Handover</b> &mdash; in-sample probe R²: TEMPO 0.88, baseline 0.85.</p>
+            <p class="compare-caption"><b>Bottle Handover</b> &mdash; typical recovery error: TEMPO 25px vs. baseline 35px.</p>
           </div>
           <p class="paper-ref">Paper: Tab. 3 (motion probe), Sec. 5; motion-encoder probe Tab. A2, App. E.</p>
 
