@@ -422,6 +422,37 @@
 
           <br>
 
+          <h3 class="title is-4">Probing Object Velocity</h3>
+          <div class="content has-text-justified">
+            <p>
+              What does it mean for a policy to "understand motion"? We make it concrete: in every frame we
+              annotate the object of interest (<span style="color:#caa400;"><b>yellow dot</b></span>) and
+              compute its image-space velocity (<span style="color:#e62828;"><b>red arrow</b></span> &mdash;
+              its direction and length show where the object is heading and how fast). We then train a probe to
+              predict this velocity from a model's hidden state: if the policy encodes motion, the probe should
+              recover the velocity. On exactly the two tasks shown below, TEMPO's hidden state decodes velocity
+              far better than the asynchronous baselines (Flick Catch 0.57 vs. &le;0.03; Wine Pour 0.44 vs.
+              &le;0.09; see the table above), evidence that the <span class="sig-mot">TEMPO<sub>MOT</sub></span>
+              and <span class="sig-act">TEMPO<sub>ACT</sub></span> signals add a motion representation the
+              backbone otherwise lacks.
+            </p>
+          </div>
+          <div class="content has-text-centered">
+            <img src="static/images/velocity_spartan.png" alt="Object velocity across a Flick Catch episode" style="max-width: 100%; border-radius:6px;" />
+            <p class="has-text-justified">
+              <b>Flick Catch.</b> The velocity of the tracked target across one episode &mdash; the arrow
+              grows and turns as the hand and flicked ball accelerate and change direction.
+            </p>
+            <img src="static/images/velocity_dynamic_pour.png" alt="Object velocity across a Wine Pour episode" style="max-width: 100%; border-radius:6px; margin-top:0.8rem;" />
+            <p class="has-text-justified">
+              <b>Wine Pour.</b> The pot's velocity as the human moves it during the pour &mdash; the signal a
+              single frame cannot provide.
+            </p>
+          </div>
+          <p class="paper-ref">Paper: Tab. 3 (motion probe), Sec. 5; motion-encoder probe Tab. A2, App. E.</p>
+
+          <br>
+
           <h3 class="title is-4" id="state-aliasing">State Aliasing in Decision Making</h3>
           <div class="content has-text-centered">
             <img src="static/images/state_alias.gif" alt="State-aliased baseline failure" style="max-width: 95%;" />
