@@ -417,8 +417,40 @@
               following phase and drops back down after the ball is caught. The two signals are consulted at
               distinct moments: motion during tracking, proprioceptive history at commitment.
             </p>
-            <p class="paper-ref">Paper: Fig. 6 (attention), Tab. 3 (motion probe), Sec. 5; input ablation in App. D (Fig. A4).</p>
+            <p class="paper-ref">Paper: Fig. 6 (attention), Sec. 5.</p>
           </div>
+
+          <br>
+
+          <h3 class="title is-4">Does the Policy Encode Object Motion?</h3>
+          <div class="content has-text-justified">
+            <p>
+              In each frame we annotate the object of interest and its velocity
+              (<span style="color:#caa400;"><b>yellow dot</b></span>,
+              <span style="color:#e63a3a;"><b>red arrow</b></span>). A probe then predicts this velocity from
+              each model's aggregated hidden state; a higher R² means the representation encodes object motion.
+            </p>
+          </div>
+          <div class="content has-text-centered">
+            <img src="static/images/gt_velocity.png" alt="Ground-truth object velocity per task" style="max-width:90%;border-radius:6px;" />
+          </div>
+          <div class="content">
+            <table class="results-table" style="max-width:700px;margin:0 auto;">
+              <thead>
+                <tr><th>Method</th><th>Bottle Handover</th><th>Drop Catch</th><th>Flick Catch</th><th>Wine Pour</th><th>Avg.</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>RTC</td><td>0.46</td><td>0.31</td><td>-0.07</td><td>0.06</td><td>0.19</td></tr>
+                <tr><td>VLASH</td><td>0.43</td><td>0.28</td><td>0.03</td><td>0.09</td><td>0.21</td></tr>
+                <tr class="ours-row"><td><b>TEMPO (Ours)</b></td><td><b>0.52</b></td><td><b>0.33</b></td><td><b>0.57</b></td><td><b>0.44</b></td><td><b>0.47</b></td></tr>
+              </tbody>
+            </table>
+            <p class="compare-caption">
+              MLP probe R² over object-of-interest velocity. Where a single frame cannot reveal motion
+              (Flick Catch, Wine Pour), the baselines collapse toward zero while TEMPO stays high.
+            </p>
+          </div>
+          <p class="paper-ref">Paper: Tab. 3, Sec. 5.</p>
 
           <br>
 
