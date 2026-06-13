@@ -132,9 +132,9 @@
           <h2 class="title is-3 has-text-centered">Real-World Rollouts</h2>
           <div class="content has-text-justified">
             <p>
-              Side-by-side real-robot rollouts of the same task: a state-of-the-art asynchronous baseline
-              (<a href="https://github.com/mit-han-lab/vlash" target="_blank" rel="noopener">VLASH</a>)
-              versus TEMPO. The baseline cannot tell how the scene is moving or which phase of the task it
+              Side-by-side real-robot rollouts of the same task: the state-of-the-art asynchronous method
+              <a href="https://github.com/mit-han-lab/vlash" target="_blank" rel="noopener">VLASH</a>
+              versus TEMPO. VLASH cannot tell how the scene is moving or which phase of the task it
               is in, so it mistimes the grasp or stalls entirely. TEMPO tracks the moving target and commits
               at the right moment.
             </p>
@@ -144,7 +144,7 @@
           <h3 class="title is-4 has-text-centered">State Aliasing: Stalls vs. Completes</h3>
           <div class="video-compare columns is-centered is-vcentered">
             <div class="column">
-              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">Baseline &mdash; Aliased, Fails to Start</span></div>
+              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH &mdash; Aliased, Fails to Start</span></div>
               <div class="video-wrap">
                 <video autoplay muted loop playsinline controls width="100%">
                   <source src="static/videos/alias_baseline.mp4" type="video/mp4">
@@ -162,7 +162,7 @@
           </div>
           <p class="compare-caption">
             The approach and retract phases of the gripper look nearly identical from a single frame. With
-            this state aliasing present in the data, the baseline collapses and cannot act; TEMPO's
+            this state aliasing present in the data, VLASH collapses and cannot act; TEMPO's
             proprioceptive history disambiguates the two phases, so the gripper approaches and retracts
             normally and completes the task. See a deeper dive in
             <a href="#state-aliasing">State Aliasing in Decision Making</a>.
@@ -175,7 +175,7 @@
           <h3 class="title is-4 has-text-centered">Moving Target: Miss vs. Catch</h3>
           <div class="video-compare columns is-centered is-vcentered">
             <div class="column">
-              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">Baseline &mdash; Fails to Track</span></div>
+              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH &mdash; Fails to Track</span></div>
               <div class="video-wrap">
                 <video autoplay muted loop playsinline controls width="100%">
                   <source src="static/videos/track_baseline.mp4" type="video/mp4">
@@ -192,7 +192,7 @@
             </div>
           </div>
           <p class="compare-caption">
-            The baseline never picks up the object's motion, so its gripper fails to follow the ball and the
+            VLASH never picks up the object's motion, so its gripper fails to follow the ball and the
             catch is missed. TEMPO learns the object-motion-to-action correspondence, tracks the appropriate
             target, and catches it on time.
           </p>
@@ -204,7 +204,7 @@
           <h3 class="title is-4 has-text-centered">Bottle Handover: Miss vs. Catch</h3>
           <div class="video-compare columns is-centered is-vcentered">
             <div class="column">
-              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">Baseline &mdash; Complete Miss</span></div>
+              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH &mdash; Complete Miss</span></div>
               <div class="video-wrap">
                 <video autoplay muted loop playsinline controls width="100%">
                   <source src="static/videos/bottle_baseline.mp4" type="video/mp4">
@@ -221,7 +221,7 @@
             </div>
           </div>
           <p class="compare-caption">
-            Receiving a bottle from a walking person. The baseline reaches for where the bottle was and
+            Receiving a bottle from a walking person. VLASH reaches for where the bottle was and
             misses it entirely; TEMPO estimates the bottle's velocity and times the grasp to intercept it.
           </p>
           <p class="paper-ref">Paper: Fig. 4, Tab. 2 (Bottle Handover), Sec. 4.2.</p>
@@ -267,7 +267,7 @@
           <h2 class="title is-3">Results</h2>
           <div class="content has-text-justified">
             <p>
-              We compare TEMPO against two state-of-the-art asynchronous baselines designed for responsive
+              We compare TEMPO against two state-of-the-art asynchronous methods, RTC and VLASH, designed for responsive
               execution. Each entry is the percentage of 50 real-robot rollouts in which the policy completes
               the task, evaluated under varied object speeds, appearances, and approach directions. For Wine
               Pour we report the percentage of "wine" mass retained in the pot at the end of the pour.
@@ -303,7 +303,7 @@
             <p class="has-text-centered" style="font-size:0.9rem; color:#666; margin-top:0.5rem;">
               On Drop Catch, where execution timing dominates over representation, TEMPO is competitive with
               the timing-focused RTC. On tasks where the target's motion is more uncertain or the object of
-              interest shifts, TEMPO consistently outperforms both baselines, including a
+              interest shifts, TEMPO consistently outperforms both RTC and VLASH, including a
               <span class="improvement">+30%</span> gain on Bottle Handover and
               <span class="improvement">+18%</span> on Flick Catch.
             </p>
@@ -450,7 +450,7 @@
             </table>
             <p class="compare-caption">
               MLP probe R² over object-of-interest velocity. Where a single frame cannot reveal motion
-              (Flick Catch, Wine Pour), the baselines collapse toward zero while TEMPO stays high.
+              (Flick Catch, Wine Pour), RTC and VLASH collapse toward zero while TEMPO stays high.
             </p>
           </div>
           <p class="paper-ref">Paper: Tab. 3, Sec. 5.</p>
@@ -459,12 +459,12 @@
 
           <h3 class="title is-4" id="state-aliasing">State Aliasing in Decision Making</h3>
           <div class="content has-text-centered">
-            <img src="static/images/state_alias.gif" alt="State-aliased baseline failure" style="max-width: 95%;" />
+            <img src="static/images/state_alias.gif" alt="State-aliased VLASH failure" style="max-width: 95%;" />
             <p class="has-text-justified">
               <b>State aliasing in action.</b> The approach and retract phases of the gripper produce nearly
-              identical observations, so a single-frame baseline cannot tell them apart and oscillates
+              identical observations, so VLASH, conditioned on a single frame, cannot tell them apart and oscillates
               between reaching and withdrawing, failing to even start the task. This is the artifact that
-              drives both asynchronous baselines to 0% on the full Wine Pour and Flick Catch tasks. TEMPO
+              drives both RTC and VLASH to 0% on the state-aliased Wine Pour and Flick Catch tasks. TEMPO
               <b>completely resolves it</b>: with a compact proprioceptive history, the policy knows which
               phase it is in and the gripper approaches and retracts normally, as shown in the
               <a href="#rollouts">state-aliasing success rollout above</a>.
