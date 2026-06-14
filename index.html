@@ -19,6 +19,59 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
+
+  <!-- ===== State-Aliasing Explorer styles ===== -->
+  <style>
+    .ax-wrap{max-width:900px;margin:0 auto;}
+    .ax-tasks{display:flex;justify-content:center;gap:8px;margin:0 0 10px;}
+    .ax-task{border:1.5px solid #cfcfcf;background:#fff;color:#555;font-weight:700;
+             padding:5px 16px;border-radius:18px;cursor:pointer;font-size:.85rem;transition:all .15s;}
+    .ax-task:hover{border-color:#999;}
+    .ax-task.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a;}
+    .ax-sub{text-align:center;color:#666;font-size:.95rem;margin:0 0 18px;}
+    .ax-twins{display:flex;align-items:stretch;gap:10px;}
+    .ax-card{flex:1 1 0;min-width:0;}
+    .ax-frame{position:relative;border-radius:8px;overflow:hidden;background:#000;
+              aspect-ratio:4/3;box-shadow:0 1px 4px rgba(0,0,0,.18);}
+    .ax-frame img{width:100%;height:100%;object-fit:cover;display:block;}
+    .ax-frame.approach{outline:3px solid #2E8B57;}
+    .ax-frame.retract{outline:3px solid #C0392B;}
+    .ax-frame.hold{outline:3px solid #b9b9b9;}
+    .ax-tag{position:absolute;left:8px;top:8px;font-size:.72rem;font-weight:700;color:#fff;
+            padding:2px 8px;border-radius:11px;letter-spacing:.02em;}
+    .ax-tag.approach{background:#2E8B57;} .ax-tag.retract{background:#C0392B;} .ax-tag.hold{background:#9a9a9a;}
+    .ax-badge{margin-top:7px;font-weight:700;font-size:.92rem;display:flex;align-items:center;gap:7px;}
+    .ax-badge.approach{color:#2E8B57;} .ax-badge.retract{color:#C0392B;} .ax-badge.hold{color:#8a8a8a;}
+    .ax-arrow{font-size:1.15rem;line-height:1;}
+    .ax-spark{margin-top:4px;} .ax-spark svg{display:block;}
+    .ax-meta{font-size:.78rem;color:#888;margin-top:2px;}
+    .ax-vs{flex:0 0 130px;display:flex;flex-direction:column;align-items:center;
+           justify-content:center;text-align:center;padding-top:8%;}
+    .ax-vs .approx{font-size:2.2rem;color:#9a9a9a;line-height:1;}
+    .ax-vs .sim{font-size:1.45rem;font-weight:800;color:#1a1a1a;}
+    .ax-vs .sim small{font-size:.7rem;font-weight:600;color:#888;display:block;letter-spacing:.04em;}
+    .ax-vs .perp{font-size:1.05rem;color:#C0392B;font-weight:700;margin:8px 0 2px;}
+    .ax-vs .dact{font-size:.95rem;font-weight:700;color:#C0392B;}
+    .ax-vs .dact small{display:block;font-size:.66rem;color:#bb6b6b;font-weight:600;}
+    .ax-proof{margin-top:18px;}
+    #axCurve{width:100%;height:auto;display:block;cursor:crosshair;
+             background:#fafafa;border:1px solid #ececec;border-radius:8px;}
+    .ax-axislabel{font-size:11px;fill:#999;}
+    .ax-controls{display:flex;align-items:center;gap:12px;margin-top:10px;}
+    .ax-btn{flex:0 0 auto;border:none;background:#1a1a1a;color:#fff;font-weight:700;
+            padding:7px 16px;border-radius:18px;cursor:pointer;font-size:.9rem;}
+    .ax-btn:hover{background:#333;}
+    #axScrub{flex:1 1 auto;}
+    .ax-hint{flex:0 0 auto;font-size:.78rem;color:#999;}
+    .ax-caption{font-size:.9rem;color:#444;line-height:1.5;margin-top:14px;}
+    .ax-caption b.g{color:#2E8B57;} .ax-caption b.r{color:#C0392B;}
+    @media (max-width:620px){
+      .ax-twins{flex-wrap:wrap;}
+      .ax-card{flex:1 1 100%;}
+      .ax-vs{flex:1 1 100%;order:3;padding-top:6px;flex-direction:row;gap:14px;}
+      .ax-vs .perp{margin:0;}
+    }
+  </style>
 </head>
 
 <body>
@@ -461,6 +514,56 @@
           <br>
 
           <h3 class="title is-4" id="state-aliasing">State Aliasing in Decision Making</h3>
+          <div class="content has-text-justified">
+            <p>
+              Why does a single-frame policy stall before it even starts? Because the <i>same image</i> recurs at
+              opposite moments of the task. Below is a real Wine&nbsp;Pour episode: as the arm reaches in to pour
+              and later withdraws, it passes through visually near-identical configurations that nonetheless demand
+              opposite actions. <b>Drag the slider or hover the curve</b> &mdash; for any frame we surface its most
+              visually similar twin from the opposite phase, measured in a frozen vision encoder's feature space.
+            </p>
+          </div>
+
+          <!-- ===== Interactive State-Aliasing Explorer ===== -->
+          <div class="ax-wrap">
+            <div class="ax-tasks">
+              <button class="ax-task" id="axTask-pour" data-task="pour">Wine Pour</button>
+              <button class="ax-task" id="axTask-spartan" data-task="spartan">Flick Catch</button>
+            </div>
+            <div class="ax-sub" id="axSub"></div>
+            <div class="ax-twins">
+              <div class="ax-card">
+                <div class="ax-frame" id="frameWrapA"><span class="ax-tag" id="tagA"></span><img id="imgA" alt="frame A"></div>
+                <div class="ax-badge" id="badgeA"><span class="ax-arrow" id="arrA"></span><span id="badgeTextA"></span></div>
+                <div class="ax-spark" id="sparkA"></div>
+                <div class="ax-meta" id="metaA"></div>
+              </div>
+              <div class="ax-vs">
+                <div class="approx">&asymp;</div>
+                <div class="sim"><span id="simVal">--</span>%<small>SAME VIEW</small></div>
+                <div class="perp">&#8595;&#8593;</div>
+                <div class="dact">&Delta;act <span id="dactVal">--</span><small>OPPOSITE ACTION</small></div>
+              </div>
+              <div class="ax-card">
+                <div class="ax-frame" id="frameWrapB"><span class="ax-tag" id="tagB"></span><img id="imgB" alt="frame B"></div>
+                <div class="ax-badge" id="badgeB"><span class="ax-arrow" id="arrB"></span><span id="badgeTextB"></span></div>
+                <div class="ax-spark" id="sparkB"></div>
+                <div class="ax-meta" id="metaB"></div>
+              </div>
+            </div>
+            <div class="ax-proof">
+              <svg id="axCurve" viewBox="0 0 1000 240" preserveAspectRatio="none"></svg>
+              <div class="ax-controls">
+                <button class="ax-btn" id="axPlay">&#9654; Play</button>
+                <input type="range" id="axScrub" min="0" max="0" value="0">
+                <span class="ax-hint">drag / hover the curve</span>
+              </div>
+            </div>
+            <p class="ax-caption" id="axCaption"></p>
+          </div>
+
+          <br>
+
           <div class="content has-text-centered">
             <img src="static/images/state_alias.gif" alt="State-aliased VLASH failure" style="max-width: 95%;" />
             <p class="has-text-justified">
@@ -583,6 +686,109 @@
         });
       }
     });
+  </script>
+
+  <!-- ===== State-Aliasing Explorer logic ===== -->
+  <script>
+  (function(){
+    const POS="#2E8B57", NEG="#C0392B", HOLD="#b9b9b9";
+    let D=null, cur=0, playing=false, timer=null, task="pour";
+    const $=id=>document.getElementById(id);
+    const svg=$("axCurve"); if(!svg) return;
+    const SVGNS="http://www.w3.org/2000/svg";
+    const W=1000,H=240,PX=46,PYt=16,PYb=34;
+    const xOf=i=>PX + (D.n<=1?0:i/(D.n-1))*(W-2*PX);
+    const yOf=a=>H-PYb - a*(H-PYt-PYb);
+    function el(tag,attrs){const e=document.createElementNS(SVGNS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e;}
+    let dynHLine,connector,playhead,markA,markB;
+    function buildCurve(){
+      svg.innerHTML="";
+      for(const a of [0,0.5,1]) svg.appendChild(el("line",{x1:PX,y1:yOf(a),x2:W-PX,y2:yOf(a),stroke:"#ececec","stroke-width":1}));
+      let ya=el("text",{x:14,y:H/2,class:"ax-axislabel",transform:`rotate(-90 14 ${H/2})`,"text-anchor":"middle"});
+      ya.textContent=(D.ui&&D.ui.yaxis)||"appearance (DINO)";svg.appendChild(ya);
+      let xa=el("text",{x:W/2,y:H-6,class:"ax-axislabel","text-anchor":"middle"});xa.textContent="time →";svg.appendChild(xa);
+      let pts=D.app.map((a,i)=>xOf(i)+","+yOf(a)).join(" ");
+      svg.appendChild(el("polyline",{points:pts,fill:"none",stroke:"#cfcfcf","stroke-width":1.4}));
+      for(let i=0;i<D.n;i++) svg.appendChild(el("circle",{cx:xOf(i),cy:yOf(D.app[i]),r:2.4,fill:pColor(i),"fill-opacity":.85}));
+      dynHLine=el("line",{stroke:"#b0b0b0","stroke-width":1,"stroke-dasharray":"3 4"}); svg.appendChild(dynHLine);
+      connector=el("line",{stroke:"#333","stroke-width":1.6,"stroke-dasharray":"5 4"}); svg.appendChild(connector);
+      playhead=el("line",{y1:PYt,y2:H-PYb,stroke:"#1a1a1a","stroke-width":1,"stroke-opacity":.35}); svg.appendChild(playhead);
+      markB=el("circle",{r:7,stroke:"#000","stroke-width":1.5}); svg.appendChild(markB);
+      markA=el("circle",{r:7.5,stroke:"#000","stroke-width":2}); svg.appendChild(markA);
+      const hit=el("rect",{x:0,y:0,width:W,height:H,fill:"transparent"}); svg.appendChild(hit);
+      hit.addEventListener("mousemove",onHover); hit.addEventListener("click",onHover);
+    }
+    function onHover(ev){
+      const r=svg.getBoundingClientRect();
+      let i=Math.round(((ev.clientX-r.left)/r.width*W-PX)/(W-2*PX)*(D.n-1));
+      setCur(Math.max(0,Math.min(D.n-1,i)));
+    }
+    function spark(container,i,color){
+      const span=8, sw=120, sh=34, pad=4;
+      const seg=D.app.slice(Math.max(0,i-span),i+1);
+      if(seg.length<2){container.innerHTML="";return;}
+      const mn=Math.min(...seg), mx=Math.max(...seg), rng=(mx-mn)||1, n=seg.length;
+      const X=k=>pad+k/(n-1)*(sw-2*pad), Y=v=>sh-pad-(v-mn)/rng*(sh-2*pad);
+      const pts=seg.map((v,k)=>X(k)+","+Y(v)).join(" ");
+      const x2=X(n-1),y2=Y(seg[n-1]),x1=X(n-2),y1=Y(seg[n-2]),ang=Math.atan2(y2-y1,x2-x1),ar=6;
+      const a1=`${x2-ar*Math.cos(ang-0.5)},${y2-ar*Math.sin(ang-0.5)}`,a2=`${x2-ar*Math.cos(ang+0.5)},${y2-ar*Math.sin(ang+0.5)}`;
+      container.innerHTML=`<svg width="${sw}" height="${sh}"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2"/><polyline points="${a1} ${x2},${y2} ${a2}" fill="none" stroke="${color}" stroke-width="2"/><text x="${sw-2}" y="${sh-2}" text-anchor="end" font-size="9" fill="#aaa">recent</text></svg>`;
+    }
+    const pClass=i=>D.dir[i]>0?"approach":D.dir[i]<0?"retract":"hold";
+    const side=i=>D.dir[i]>0?D.ui.pos:D.dir[i]<0?D.ui.neg:(D.ui.hold||D.ui.pos);
+    const pColor=i=>D.dir[i]>0?POS:D.dir[i]<0?NEG:HOLD;
+    function setCur(i){
+      cur=i; const A=i, B=D.twin[i]; $("axScrub").value=i;
+      $("imgA").src=D.base+D.frames[A];
+      $("frameWrapA").className="ax-frame "+pClass(A);
+      $("tagA").className="ax-tag "+pClass(A); $("tagA").textContent=side(A).tag;
+      $("badgeA").className="ax-badge "+pClass(A);
+      $("arrA").textContent=side(A).arrow; $("arrA").style.color=pColor(A);
+      $("badgeTextA").innerHTML=side(A).badge; $("metaA").textContent="t = "+D.t[A].toFixed(1)+" s";
+      spark($("sparkA"),A,pColor(A));
+      const hasB=B>=0;
+      document.querySelectorAll('.ax-card')[1].style.visibility=hasB?"visible":"hidden";
+      if(hasB){
+        $("imgB").src=D.base+D.frames[B];
+        $("frameWrapB").className="ax-frame "+pClass(B);
+        $("tagB").className="ax-tag "+pClass(B); $("tagB").textContent=side(B).tag;
+        $("badgeB").className="ax-badge "+pClass(B);
+        $("arrB").textContent=side(B).arrow; $("arrB").style.color=pColor(B);
+        $("badgeTextB").innerHTML=side(B).badge; $("metaB").textContent="t = "+D.t[B].toFixed(1)+" s";
+        spark($("sparkB"),B,pColor(B));
+        $("simVal").textContent=Math.round(D.sim[A]); $("dactVal").textContent=D.dact[A].toFixed(2);
+      }
+      markA.setAttribute("cx",xOf(A)); markA.setAttribute("cy",yOf(D.app[A])); markA.setAttribute("fill",pColor(A));
+      playhead.setAttribute("x1",xOf(A)); playhead.setAttribute("x2",xOf(A));
+      if(hasB){
+        markB.style.display=""; connector.style.display=""; dynHLine.style.display="";
+        markB.setAttribute("cx",xOf(B)); markB.setAttribute("cy",yOf(D.app[B])); markB.setAttribute("fill",pColor(B));
+        connector.setAttribute("x1",xOf(A)); connector.setAttribute("y1",yOf(D.app[A]));
+        connector.setAttribute("x2",xOf(B)); connector.setAttribute("y2",yOf(D.app[B]));
+        const ymid=yOf((D.app[A]+D.app[B])/2);
+        dynHLine.setAttribute("x1",PX); dynHLine.setAttribute("x2",W-PX);
+        dynHLine.setAttribute("y1",ymid); dynHLine.setAttribute("y2",ymid);
+      } else { markB.style.display="none"; connector.style.display="none"; dynHLine.style.display="none"; }
+    }
+    function play(){
+      playing=!playing; $("axPlay").innerHTML=playing?"&#10073;&#10073; Pause":"&#9654; Play";
+      if(playing) timer=setInterval(()=>setCur((cur+1)%D.n),1000/Math.max(4,D.fps)); else clearInterval(timer);
+    }
+    function loadTask(t){
+      task=t;
+      document.querySelectorAll('.ax-task').forEach(b=>b.classList.toggle('active',b.dataset.task===t));
+      if(playing) play();
+      fetch("static/data/alias_"+t+".json").then(r=>r.json()).then(d=>{
+        D=d; $("axScrub").max=D.n-1;
+        $("axSub").innerHTML=D.ui.sub; $("axCaption").innerHTML=D.ui.caption;
+        buildCurve(); setCur(D.showcase[0]);
+      }).catch(()=>{});
+    }
+    $("axScrub").addEventListener("input",e=>{ if(playing)play(); setCur(+e.target.value); });
+    $("axPlay").addEventListener("click",play);
+    document.querySelectorAll('.ax-task').forEach(b=>b.addEventListener('click',()=>loadTask(b.dataset.task)));
+    loadTask("pour");
+  })();
   </script>
 
 </body>
