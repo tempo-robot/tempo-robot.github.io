@@ -206,7 +206,7 @@
             this state aliasing present in the demonstrations, VLASH collapses and cannot act; TEMPO's
             proprioceptive history disambiguates the two phases, so the gripper approaches and retracts
             normally and completes the task. See a deeper dive in
-            <a href="#state-aliasing">State Aliasing in Decision Making</a>.
+            <a href="#state-aliasing">Why TEMPO<sub>ACT</sub> helps?</a> below.
           </p>
 
           <br>
@@ -410,7 +410,7 @@
         <div class="column is-full-width">
           <h2 class="title is-3">Analysis</h2>
 
-          <h3 class="title is-4">The Policy Attends to Each Signal When It Matters</h3>
+          <h3 class="title is-4">TEMPO can complementarily use motion and proprioceptive information</h3>
           <div class="content has-text-centered">
             <img src="static/images/attention.png" alt="Attention mass over an episode" style="max-width: 85%;" />
             <p class="has-text-justified">
@@ -426,7 +426,8 @@
 
           <br>
 
-          <h3 class="title is-4">Does the Policy Encode Object Motion?</h3>
+          <h3 class="title is-4">Why <span class="sig-mot">TEMPO<sub>MOT</sub></span> helps?<br>
+            <span style="font-weight:400;font-size:0.8em;color:#555;">Prior VLAs struggle to infer velocity of active object.</span></h3>
           <div class="content has-text-justified">
             <p>
               For each task we trace the active object's trajectory over the past 16 frames
@@ -459,7 +460,7 @@
 
           <br>
 
-          <h3 class="title is-4" id="state-aliasing">State Aliasing in Decision Making</h3>
+          <h3 class="title is-4" id="state-aliasing">Why <span class="sig-act">TEMPO<sub>ACT</sub></span> helps? State Aliasing!</h3>
           <div class="content has-text-justified">
             <p>
               Why does a single-frame policy stall before it even starts? Because the <i>same image</i> recurs at
@@ -505,7 +506,7 @@
 
           <br>
 
-          <h3 class="title is-4">Policy alias behavior</h3>
+          <h3 class="title is-4">Prior VLAs are hurt by state aliasing.</h3>
           <div class="content has-text-justified">
             <p>
               The approach and retract phases of the gripper produce nearly
