@@ -148,8 +148,8 @@
           <h2 class="title is-3 has-text-centered">Dynamic Tasks</h2>
           <div class="content has-text-justified">
             <p>
-              We evaluate on a bimanual platform across four dynamic tasks (Bottle Handover, Drop
-              Catch, Flick Catch, and Wine Pour), each with a moving target and sequential subtasks
+              We evaluate on a bimanual platform across four dynamic tasks (Drop Catch, Bottle
+              Handover, Flick Catch, and Wine Pour), each with a moving target and sequential subtasks
               that a single-frame observation cannot resolve.
             </p>
             <p class="paper-ref">Paper: Sec. 4.1 (task properties P1 to P4), Fig. 3.</p>
@@ -323,8 +323,8 @@
               <thead>
                 <tr>
                   <th>Method</th>
-                  <th>Bottle Handover</th>
                   <th>Drop Catch</th>
+                  <th>Bottle Handover</th>
                   <th>Flick Catch</th>
                   <th>Wine Pour</th>
                   <th>Average</th>
@@ -333,7 +333,7 @@
               <tbody>
                 <tr>
                   <td>RTC</td>
-                  <td>44%</td><td><b>80%</b></td><td>48%</td><td>80.8%</td><td>63.2%</td>
+                  <td><b>80%</b></td><td>44%</td><td>48%</td><td>80.8%</td><td>63.2%</td>
                 </tr>
                 <tr>
                   <td>VLASH</td>
@@ -341,7 +341,7 @@
                 </tr>
                 <tr class="ours-row">
                   <td><b>TEMPO (Ours)</b></td>
-                  <td><b>74%</b></td><td>66%</td><td><b>66%</b></td><td><b>98.1%</b></td><td><b>76.0%</b></td>
+                  <td>66%</td><td><b>74%</b></td><td><b>66%</b></td><td><b>98.1%</b></td><td><b>76.0%</b></td>
                 </tr>
               </tbody>
             </table>
@@ -480,17 +480,17 @@
             </p>
           </div>
           <div class="content has-text-centered">
-            <img src="static/images/gt_trajectory16.png" alt="Ground-truth 16-frame active-object trajectory per task" style="max-width:100%;border-radius:6px;" />
+            <img src="static/images/gt_trajectory16_v2.png" alt="Ground-truth 16-frame active-object trajectory per task" style="max-width:100%;border-radius:6px;" />
           </div>
           <div class="content">
             <table class="results-table" style="max-width:700px;margin:0 auto;">
               <thead>
-                <tr><th>Method</th><th>Bottle Handover</th><th>Drop Catch</th><th>Flick Catch</th><th>Wine Pour</th><th>Avg.</th></tr>
+                <tr><th>Method</th><th>Drop Catch</th><th>Bottle Handover</th><th>Flick Catch</th><th>Wine Pour</th><th>Avg.</th></tr>
               </thead>
               <tbody>
-                <tr><td>RTC</td><td>0.46</td><td>0.31</td><td>-0.07</td><td>0.06</td><td>0.19</td></tr>
-                <tr><td>VLASH</td><td>0.43</td><td>0.28</td><td>0.03</td><td>0.09</td><td>0.21</td></tr>
-                <tr class="ours-row"><td><b>TEMPO (Ours)</b></td><td><b>0.52</b></td><td><b>0.33</b></td><td><b>0.57</b></td><td><b>0.44</b></td><td><b>0.47</b></td></tr>
+                <tr><td>RTC</td><td>0.31</td><td>0.46</td><td>-0.07</td><td>0.06</td><td>0.19</td></tr>
+                <tr><td>VLASH</td><td>0.28</td><td>0.43</td><td>0.03</td><td>0.09</td><td>0.21</td></tr>
+                <tr class="ours-row"><td><b>TEMPO (Ours)</b></td><td><b>0.33</b></td><td><b>0.52</b></td><td><b>0.57</b></td><td><b>0.44</b></td><td><b>0.47</b></td></tr>
               </tbody>
             </table>
             <p class="compare-caption">
@@ -516,8 +516,8 @@
           <!-- ===== Interactive State-Aliasing Explorer ===== -->
           <div class="ax-wrap">
             <div class="ax-tasks">
-              <button class="ax-task" id="axTask-pour" data-task="pour">Wine Pour</button>
               <button class="ax-task" id="axTask-spartan" data-task="spartan">Flick Catch</button>
+              <button class="ax-task" id="axTask-pour" data-task="pour">Wine Pour</button>
             </div>
             <div class="ax-sub" id="axSub"></div>
             <div class="ax-twins" id="axTwins">
@@ -556,7 +556,7 @@
               <b>State aliasing in action.</b> The approach and retract phases of the gripper produce nearly
               identical observations, so VLASH, conditioned on a single frame, cannot tell them apart and oscillates
               between reaching and withdrawing, failing to even start the task. This is the artifact that
-              drives both RTC and VLASH to 0% on the state-aliased Wine Pour and Flick Catch tasks. TEMPO
+              drives both RTC and VLASH to 0% on the state-aliased Flick Catch and Wine Pour tasks. TEMPO
               <b>completely resolves it</b>: with a compact proprioceptive history, the policy knows which
               phase it is in and the gripper approaches and retracts normally, as shown in the
               <a href="#rollouts">state-aliasing success rollout above</a>.
