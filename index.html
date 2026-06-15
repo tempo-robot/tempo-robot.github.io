@@ -33,30 +33,25 @@
     .ax-card{flex:1 1 0;min-width:0;}
     .ax-frame{position:relative;border-radius:8px;overflow:hidden;background:#000;
               aspect-ratio:4/3;box-shadow:0 1px 4px rgba(0,0,0,.18);}
-    .ax-frame img{width:100%;height:100%;object-fit:cover;display:block;}
+    .ax-frame img,.ax-frame video{width:100%;height:100%;object-fit:cover;display:block;}
     .ax-frame.approach{outline:3px solid #2E8B57;}
     .ax-frame.retract{outline:3px solid #C0392B;}
     .ax-frame.hold{outline:3px solid #b9b9b9;}
     .ax-tag{position:absolute;left:8px;top:8px;font-size:.72rem;font-weight:700;color:#fff;
-            padding:2px 8px;border-radius:11px;letter-spacing:.02em;}
+            padding:2px 8px;border-radius:11px;letter-spacing:.02em;z-index:2;}
     .ax-tag.approach{background:#2E8B57;} .ax-tag.retract{background:#C0392B;} .ax-tag.hold{background:#9a9a9a;}
-    .ax-badge{margin-top:7px;font-weight:700;font-size:.92rem;display:flex;align-items:center;gap:7px;}
-    .ax-badge.approach{color:#2E8B57;} .ax-badge.retract{color:#C0392B;} .ax-badge.hold{color:#8a8a8a;}
-    .ax-arrow{font-size:1.15rem;line-height:1;}
-    .ax-spark{margin-top:4px;} .ax-spark svg{display:block;}
-    .ax-meta{font-size:.78rem;color:#888;margin-top:2px;}
+    .ax-meta{font-size:.78rem;color:#888;margin-top:4px;}
     .ax-vs{flex:0 0 130px;display:flex;flex-direction:column;align-items:center;
-           justify-content:center;text-align:center;padding-top:8%;}
+           justify-content:center;text-align:center;padding-top:6%;}
     .ax-vs .approx{font-size:2.2rem;color:#9a9a9a;line-height:1;}
-    .ax-vs .sim{font-size:1.45rem;font-weight:800;color:#1a1a1a;}
-    .ax-vs .sim small{font-size:.7rem;font-weight:600;color:#888;display:block;letter-spacing:.04em;}
-    .ax-vs .perp{font-size:1.05rem;color:#C0392B;font-weight:700;margin:8px 0 2px;}
-    .ax-vs .dact{font-size:.95rem;font-weight:700;color:#C0392B;}
-    .ax-vs .dact small{display:block;font-size:.66rem;color:#bb6b6b;font-weight:600;}
+    .ax-vs .sim{font-size:1.7rem;font-weight:800;color:#1a1a1a;line-height:1.1;}
+    .ax-vs .sim-lbl{font-size:.7rem;font-weight:600;color:#888;letter-spacing:.03em;margin-top:2px;}
+    .ax-vs .ax-playhint{font-size:.72rem;color:#2E8B57;font-weight:700;margin-top:12px;line-height:1.2;}
     .ax-proof{margin-top:18px;}
     #axCurve{width:100%;height:auto;display:block;
              background:#fafafa;border:1px solid #ececec;border-radius:8px;}
     .ax-axislabel{font-size:11px;fill:#999;}
+    .ax-ylabel{font-size:12px;fill:#333;font-weight:600;}
     .ax-caption{font-size:.9rem;color:#444;line-height:1.5;margin-top:14px;}
     .ax-caption b.g{color:#2E8B57;} .ax-caption b.r{color:#C0392B;}
     @media (max-width:620px){
@@ -525,23 +520,25 @@
               <button class="ax-task" id="axTask-spartan" data-task="spartan">Flick Catch</button>
             </div>
             <div class="ax-sub" id="axSub"></div>
-            <div class="ax-twins">
+            <div class="ax-twins" id="axTwins">
               <div class="ax-card">
-                <div class="ax-frame" id="frameWrapA"><span class="ax-tag" id="tagA"></span><img id="imgA" alt="frame A"></div>
-                <div class="ax-badge" id="badgeA"><span class="ax-arrow" id="arrA"></span><span id="badgeTextA"></span></div>
-                <div class="ax-spark" id="sparkA"></div>
+                <div class="ax-frame" id="frameWrapA">
+                  <span class="ax-tag" id="tagA"></span>
+                  <video id="vidA" muted playsinline loop preload="auto"></video>
+                </div>
                 <div class="ax-meta" id="metaA"></div>
               </div>
               <div class="ax-vs">
                 <div class="approx">&asymp;</div>
-                <div class="sim"><span id="simVal">--</span>%<small>SAME VIEW</small></div>
-                <div class="perp">&#8595;&#8593;</div>
-                <div class="dact">&Delta;act <span id="dactVal">--</span><small>OPPOSITE ACTION</small></div>
+                <div class="sim"><span id="cosVal">--</span></div>
+                <div class="sim-lbl">DINOv2 cosine<br>similarity</div>
+                <div class="ax-playhint">&#9654; hover to play next 2.5s</div>
               </div>
               <div class="ax-card">
-                <div class="ax-frame" id="frameWrapB"><span class="ax-tag" id="tagB"></span><img id="imgB" alt="frame B"></div>
-                <div class="ax-badge" id="badgeB"><span class="ax-arrow" id="arrB"></span><span id="badgeTextB"></span></div>
-                <div class="ax-spark" id="sparkB"></div>
+                <div class="ax-frame" id="frameWrapB">
+                  <span class="ax-tag" id="tagB"></span>
+                  <video id="vidB" muted playsinline loop preload="auto"></video>
+                </div>
                 <div class="ax-meta" id="metaB"></div>
               </div>
             </div>
@@ -690,41 +687,26 @@
     const yOf=a=>H-PYb - a*(H-PYt-PYb);
     const el=(tag,attrs)=>{const e=document.createElementNS(SVGNS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e;};
     const pClass=i=>D.dir[i]>0?"approach":D.dir[i]<0?"retract":"hold";
-    const side=i=>D.dir[i]>0?D.ui.pos:D.dir[i]<0?D.ui.neg:(D.ui.hold||D.ui.pos);
     const pColor=i=>D.dir[i]>0?POS:D.dir[i]<0?NEG:HOLD;
+    const tagTxt=i=>D.dir[i]>0?(D.ui.pos.tag):D.dir[i]<0?(D.ui.neg.tag):(D.ui.mid||"");
 
-    // small recent-trajectory sparkline (the proprioceptive cue) ending at frame i
-    function spark(container,i,color){
-      const span=8, sw=120, sh=34, pad=4;
-      const seg=D.app.slice(Math.max(0,i-span),i+1);
-      if(seg.length<2){container.innerHTML="";return;}
-      const mn=Math.min(...seg), mx=Math.max(...seg), rng=(mx-mn)||1, n=seg.length;
-      const X=k=>pad+k/(n-1)*(sw-2*pad), Y=v=>sh-pad-(v-mn)/rng*(sh-2*pad);
-      const pts=seg.map((v,k)=>X(k)+","+Y(v)).join(" ");
-      const x2=X(n-1),y2=Y(seg[n-1]),x1=X(n-2),y1=Y(seg[n-2]),ang=Math.atan2(y2-y1,x2-x1),ar=6;
-      const a1=`${x2-ar*Math.cos(ang-0.5)},${y2-ar*Math.sin(ang-0.5)}`,a2=`${x2-ar*Math.cos(ang+0.5)},${y2-ar*Math.sin(ang+0.5)}`;
-      container.innerHTML=`<svg width="${sw}" height="${sh}"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2"/><polyline points="${a1} ${x2},${y2} ${a2}" fill="none" stroke="${color}" stroke-width="2"/><text x="${sw-2}" y="${sh-2}" text-anchor="end" font-size="9" fill="#aaa">recent</text></svg>`;
-    }
-
-    function drawCard(card,i){ // card: "A" or "B"
-      $("img"+card).src=D.base+D.frames[i];
+    function drawCard(card,i,clip){ // card: "A" or "B"
+      const v=$("vid"+card);
+      v.poster=D.base+D.frames[i];
+      if(v.getAttribute("src")!==clip){ v.setAttribute("src",clip); v.load(); }
       $("frameWrap"+card).className="ax-frame "+pClass(i);
-      $("tag"+card).className="ax-tag "+pClass(i); $("tag"+card).textContent=side(i).tag;
-      $("badge"+card).className="ax-badge "+pClass(i);
-      $("arr"+card).textContent=side(i).arrow; $("arr"+card).style.color=pColor(i);
-      $("badgeText"+card).innerHTML=side(i).badge; $("meta"+card).textContent="t = "+D.t[i].toFixed(1)+" s";
-      spark($("spark"+card),i,pColor(i));
+      $("tag"+card).className="ax-tag "+pClass(i); $("tag"+card).textContent=tagTxt(i);
+      $("meta"+card).textContent="t = "+D.t[i].toFixed(1)+" s";
     }
 
     function buildCurve(A,B){
       svg.innerHTML="";
       for(const a of [0,0.5,1]) svg.appendChild(el("line",{x1:PX,y1:yOf(a),x2:W-PX,y2:yOf(a),stroke:"#ececec","stroke-width":1}));
-      let ya=el("text",{x:14,y:H/2,class:"ax-axislabel",transform:`rotate(-90 14 ${H/2})`,"text-anchor":"middle"});
-      ya.textContent=(D.ui&&D.ui.yaxis)||"arm reach";svg.appendChild(ya);
-      let xa=el("text",{x:W/2,y:H-6,class:"ax-axislabel","text-anchor":"middle"});xa.textContent="time →";svg.appendChild(xa);
+      let ya=el("text",{x:16,y:H/2,class:"ax-ylabel",transform:`rotate(-90 16 ${H/2})`,"text-anchor":"middle"});
+      ya.textContent=(D.ui&&D.ui.yaxis)||"EEF distance from start position";svg.appendChild(ya);
+      let xa=el("text",{x:W/2,y:H-6,class:"ax-axislabel","text-anchor":"middle"});xa.textContent="time";svg.appendChild(xa);
       svg.appendChild(el("polyline",{points:D.app.map((a,i)=>xOf(i)+","+yOf(a)).join(" "),fill:"none",stroke:"#cfcfcf","stroke-width":1.4}));
       for(let i=0;i<D.n;i++) svg.appendChild(el("circle",{cx:xOf(i),cy:yOf(D.app[i]),r:2.4,fill:pColor(i),"fill-opacity":.85}));
-      // shared-reach dashed line + connector between the two markers
       const ymid=yOf((D.app[A]+D.app[B])/2);
       svg.appendChild(el("line",{x1:PX,y1:ymid,x2:W-PX,y2:ymid,stroke:"#b0b0b0","stroke-width":1,"stroke-dasharray":"3 4"}));
       svg.appendChild(el("line",{x1:xOf(A),y1:yOf(D.app[A]),x2:xOf(B),y2:yOf(D.app[B]),stroke:"#333","stroke-width":1.6,"stroke-dasharray":"5 4"}));
@@ -732,16 +714,25 @@
       svg.appendChild(el("circle",{cx:xOf(A),cy:yOf(D.app[A]),r:7.5,fill:pColor(A),stroke:"#000","stroke-width":2}));
     }
 
+    function playBoth(on){
+      for(const id of ["vidA","vidB"]){ const v=$(id);
+        if(on){ const p=v.play(); if(p&&p.catch)p.catch(()=>{}); } else { v.pause(); v.currentTime=0; } }
+    }
+
     function loadTask(t){
+      playBoth(false);
       document.querySelectorAll('.ax-task').forEach(b=>b.classList.toggle('active',b.dataset.task===t));
       fetch("static/data/alias_"+t+".json").then(r=>r.json()).then(d=>{
         D=d; const [A,B]=D.showcase;
         $("axSub").innerHTML=D.ui.sub; $("axCaption").innerHTML=D.ui.caption;
-        drawCard("A",A); drawCard("B",B);
-        $("simVal").textContent=Math.round(D.scSim); $("dactVal").textContent=D.scDact.toFixed(2);
+        drawCard("A",A,D.clipA); drawCard("B",B,D.clipB);
+        $("cosVal").textContent=D.scCos.toFixed(2);
         buildCurve(A,B);
       }).catch(()=>{});
     }
+    const tw=$("axTwins");
+    tw.addEventListener("mouseenter",()=>playBoth(true));
+    tw.addEventListener("mouseleave",()=>playBoth(false));
     document.querySelectorAll('.ax-task').forEach(b=>b.addEventListener('click',()=>loadTask(b.dataset.task)));
     loadTask("pour");
   })();
