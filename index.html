@@ -72,7 +72,7 @@
       <li><a href="#abstract" data-target="abstract">Abstract</a></li>
       <li><a href="#tasks" data-target="tasks">Tasks</a></li>
       <li><a href="#rollouts" data-target="rollouts">Rollouts</a></li>
-      <li><a href="#method" data-target="method">Method</a></li>
+      <li><a href="#method" data-target="method">Pipeline</a></li>
       <li><a href="#results" data-target="results">Results</a></li>
       <li><a href="#analysis" data-target="analysis">Analysis</a></li>
       <li><a href="#BibTeX" data-target="BibTeX">BibTeX</a></li>
@@ -277,10 +277,10 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column is-full-width">
-          <h2 class="title is-3">Method</h2>
+          <h2 class="title is-3">TEMPO Pipeline</h2>
 
           <div class="content has-text-justified method-figure">
-            <video autoplay muted loop playsinline controls poster="static/images/method.png"
+            <video autoplay muted playsinline controls poster="static/images/method.png"
                    style="width:100%; border-radius:4px; display:block;">
               <source src="static/videos/method_v2.mp4" type="video/mp4">
             </video>
@@ -471,7 +471,7 @@
           <h3 class="title is-4">Does the Policy Encode Object Motion?</h3>
           <div class="content has-text-justified">
             <p>
-              For each task we trace the object of interest's trajectory over the past 16 frames
+              For each task we trace the active object's trajectory over the past 16 frames
               (<span style="color:#5078ff;"><b>blue</b></span> = 16 frames ago &rarr;
               <span style="color:#e63a3a;"><b>red</b></span> = now;
               <span style="color:#caa400;"><b>yellow dot</b></span> = current position). A probe then predicts
@@ -480,7 +480,7 @@
             </p>
           </div>
           <div class="content has-text-centered">
-            <img src="static/images/gt_trajectory16.png" alt="Ground-truth 16-frame object trajectory per task" style="max-width:100%;border-radius:6px;" />
+            <img src="static/images/gt_trajectory16.png" alt="Ground-truth 16-frame active-object trajectory per task" style="max-width:100%;border-radius:6px;" />
           </div>
           <div class="content">
             <table class="results-table" style="max-width:700px;margin:0 auto;">
@@ -494,7 +494,7 @@
               </tbody>
             </table>
             <p class="compare-caption">
-              MLP probe R² over object-of-interest velocity. Where a single frame cannot reveal motion
+              MLP probe R² over active object velocity. Where a single frame cannot reveal motion
               (Flick Catch, Wine Pour), RTC and VLASH collapse toward zero while TEMPO stays high.
             </p>
           </div>
