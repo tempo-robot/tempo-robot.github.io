@@ -214,11 +214,11 @@ body {
 }
 
 .compare-caption {
-  font-size: 0.9rem;
-  color: #555;
-  text-align: center;
-  margin: 0.4rem auto 0 auto;
-  max-width: 760px;
+  font-size: 1rem;
+  color: #363636;
+  text-align: left;
+  margin: 0.75rem 0 0 0;
+  line-height: 1.5;
 }
 
 /* Video placeholder styling */
