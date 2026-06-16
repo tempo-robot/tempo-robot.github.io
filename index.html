@@ -46,7 +46,13 @@
     .ax-vs .approx{font-size:2.2rem;color:#9a9a9a;line-height:1;}
     .ax-vs .sim{font-size:1.7rem;font-weight:800;color:#1a1a1a;line-height:1.1;}
     .ax-vs .sim-lbl{font-size:.7rem;font-weight:600;color:#888;letter-spacing:.03em;margin-top:2px;}
-    .ax-vs .ax-playhint{font-size:.72rem;color:#2E8B57;font-weight:700;margin-top:12px;line-height:1.2;}
+    .ax-vs .ax-playbtn{width:46px;height:46px;border-radius:50%;border:none;background:#2E8B57;color:#fff;
+            font-size:1.05rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+            margin:14px auto 0;padding-left:2px;box-shadow:0 2px 6px rgba(0,0,0,.22);transition:background .15s,transform .08s;}
+    .ax-vs .ax-playbtn:hover{background:#256e49;}
+    .ax-vs .ax-playbtn:active{transform:scale(.93);}
+    .ax-vs .ax-playbtn.playing{background:#C0392B;padding-left:0;}
+    .ax-vs .ax-playlbl{font-size:.66rem;color:#999;margin-top:5px;letter-spacing:.02em;}
     .ax-proof{margin-top:18px;}
     #axCurve{width:100%;height:auto;display:block;
              background:#fafafa;border:1px solid #ececec;border-radius:8px;}
@@ -493,7 +499,8 @@
                 <div class="approx">&asymp;</div>
                 <div class="sim"><span id="cosVal">--</span></div>
                 <div class="sim-lbl">DINOv2 cosine<br>similarity</div>
-                <div class="ax-playhint">&#9654; hover to play next 5s</div>
+                <button class="ax-playbtn" id="axPlayBtn" type="button" aria-label="Play next 5s">&#9654;</button>
+                <div class="ax-playlbl">play next 5s</div>
               </div>
               <div class="ax-card">
                 <div class="ax-frame" id="frameWrapB">
@@ -676,13 +683,19 @@
       svg.appendChild(el("circle",{cx:xOf(A),cy:yOf(D.app[A]),r:7.5,fill:pColor(A),stroke:"#000","stroke-width":2}));
     }
 
-    function playBoth(on){
+    let playing=false;
+    function setPlaying(on){
+      playing=on;
       for(const id of ["vidA","vidB"]){ const v=$(id);
         if(on){ const p=v.play(); if(p&&p.catch)p.catch(()=>{}); } else { v.pause(); v.currentTime=0; } }
+      const btn=$("axPlayBtn");
+      btn.innerHTML = on ? "&#10073;&#10073;" : "&#9654;";
+      btn.classList.toggle("playing",on);
+      btn.setAttribute("aria-label", on?"Reset":"Play next 5s");
     }
 
     function loadTask(t){
-      playBoth(false);
+      setPlaying(false);
       document.querySelectorAll('.ax-task').forEach(b=>b.classList.toggle('active',b.dataset.task===t));
       fetch("static/data/alias_"+t+".json").then(r=>r.json()).then(d=>{
         D=d; const [A,B]=D.showcase;
@@ -691,9 +704,7 @@
         buildCurve(A,B);
       }).catch(()=>{});
     }
-    const tw=$("axTwins");
-    tw.addEventListener("mouseenter",()=>playBoth(true));
-    tw.addEventListener("mouseleave",()=>playBoth(false));
+    $("axPlayBtn").addEventListener("click",()=>setPlaying(!playing));
     document.querySelectorAll('.ax-task').forEach(b=>b.addEventListener('click',()=>loadTask(b.dataset.task)));
     loadTask("pour");
   })();
