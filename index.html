@@ -80,7 +80,14 @@
       <li><a href="#rollouts" data-target="rollouts">Rollouts</a></li>
       <li><a href="#method" data-target="method">Pipeline</a></li>
       <li><a href="#results" data-target="results">Results</a></li>
-      <li><a href="#analysis" data-target="analysis">Analysis</a></li>
+      <li class="nav-group">
+        <a href="#analysis" data-target="analysis">Analysis</a>
+        <ul class="nav-sub">
+          <li><a href="#signal-attention" data-target="signal-attention">Signal Attention</a></li>
+          <li><a href="#velocity-probe" data-target="velocity-probe">Velocity Probe</a></li>
+          <li><a href="#state-aliasing" data-target="state-aliasing">State Aliasing</a></li>
+        </ul>
+      </li>
       <li><a href="#BibTeX" data-target="BibTeX">BibTeX</a></li>
     </ul>
   </nav>
@@ -414,9 +421,7 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column is-full-width">
-          <h2 class="title is-3">Analysis</h2>
-
-          <h3 class="title is-4">TEMPO can complementarily use motion and proprioceptive information</h3>
+          <h3 class="title is-4" id="signal-attention">TEMPO can complementarily use motion and proprioceptive information</h3>
           <div class="content has-text-centered">
             <video autoplay muted loop playsinline controls preload="auto"
                    aria-label="Attention mass over an episode"
@@ -436,7 +441,7 @@
 
           <br>
 
-          <h3 class="title is-4">Why <span class="sig-mot">TEMPO<sub>MOT</sub></span> helps?<br>
+          <h3 class="title is-4" id="velocity-probe">Why <span class="sig-mot">TEMPO<sub>MOT</sub></span> helps?<br>
             <span style="font-weight:400;font-size:0.8em;color:#555;">Prior VLAs struggle to infer velocity of active object.</span></h3>
           <div class="content has-text-justified">
             <p>

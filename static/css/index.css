@@ -377,6 +377,11 @@ body {
   background: rgba(42, 91, 216, 0.07);
 }
 
+/* Nested sub-section links */
+.sidebar-nav .nav-group > a { font-weight: 600; color: #555; }
+.sidebar-nav .nav-sub { list-style: none; margin: 1px 0 4px 0; padding: 0; }
+.sidebar-nav .nav-sub a { padding: 4px 10px 4px 22px; font-size: 0.78rem; color: #9a9a9a; }
+
 /* Hide sidebar on smaller screens */
 @media screen and (max-width: 1280px) {
   .sidebar-nav {
