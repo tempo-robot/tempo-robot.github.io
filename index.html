@@ -290,6 +290,15 @@
               </div>
               <div class="vid-success base">Success rate: <b>38%</b></div>
             </div>
+            <div class="column is-narrow fmbar-vcol">
+              <div class="fmbar-vlabel">VLASH</div>
+              <div class="fmbar-vtrack">
+                <div class="fmbar-seg" style="height:38%;background:#6FB07F" data-mode="Success" data-desc="Task completed: the ball is caught.">19</div>
+                <div class="fmbar-seg light" style="height:4%;background:#FCBBA1" data-mode="Lagged behind hand" data-desc="The gripper reacts but lags behind and misses the ball.">2</div>
+                <div class="fmbar-seg" style="height:12%;background:#EF3B2C" data-mode="Overshoot" data-desc="The gripper overshoots the ball.">6</div>
+                <div class="fmbar-seg" style="height:46%;background:#A50F15" data-mode="Premature move (before hand)" data-desc="The robot moves before the human releases the ball.">23</div>
+              </div>
+            </div>
             <div class="column">
               <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours): Catches</span></div>
               <div class="video-wrap">
@@ -299,12 +308,29 @@
               </div>
               <div class="vid-success ours">Success rate: <b>66%</b></div>
             </div>
+            <div class="column is-narrow fmbar-vcol ours">
+              <div class="fmbar-vlabel">TEMPO</div>
+              <div class="fmbar-vtrack">
+                <div class="fmbar-seg" style="height:66%;background:#6FB07F" data-mode="Success" data-desc="Task completed: the ball is caught.">33</div>
+                <div class="fmbar-seg light" style="height:8%;background:#FCBBA1" data-mode="Lagged behind hand" data-desc="The gripper reacts but lags behind and misses the ball.">4</div>
+                <div class="fmbar-seg" style="height:14%;background:#EF3B2C" data-mode="Overshoot" data-desc="The gripper overshoots the ball.">7</div>
+                <div class="fmbar-seg" style="height:12%;background:#A50F15" data-mode="Premature move (before hand)" data-desc="The robot moves before the human releases the ball.">6</div>
+              </div>
+            </div>
           </div>
           <p class="compare-caption">
-            A ball is released into the workspace and the gripper must intercept it in time. VLASH
-            reacts too late and the ball gets past the gripper; TEMPO anticipates the ball and closes
-            on it at the right moment.
+            A ball is released into the workspace and the gripper must catch it. VLASH often commits
+            before the ball is released (a premature move), so it is out of position; TEMPO uses its
+            recent-action history to hold until the right moment and time the catch. The bars beside
+            each video break that method's 50 Drop Catch rollouts into success (green) and failure
+            modes (reds); hover any segment for details.
           </p>
+          <div class="fmbar-legend">
+            <span class="key"><i style="background:#6FB07F"></i>Success</span>
+            <span class="key"><i style="background:#FCBBA1"></i>Lagged behind hand</span>
+            <span class="key"><i style="background:#EF3B2C"></i>Overshoot</span>
+            <span class="key"><i style="background:#A50F15"></i>Premature move</span>
+          </div>
 
           <br>
 
