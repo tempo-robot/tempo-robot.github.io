@@ -225,7 +225,6 @@
           </div>
 
           <!-- Bottle Handover -->
-          <h3 class="title is-4">Bottle Handover: Miss vs. Catch</h3>
           <div class="video-compare columns is-centered">
             <div class="column">
               <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH: Complete Miss</span></div>
@@ -279,7 +278,6 @@
           <br>
 
           <!-- Ball Drop -->
-          <h3 class="title is-4">Ball Drop: Miss vs. Catch</h3>
           <div class="video-compare columns is-centered">
             <div class="column">
               <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH: Misses the Catch</span></div>
@@ -319,11 +317,13 @@
             </div>
           </div>
           <p class="compare-caption">
-            A ball is released into the workspace and the gripper must catch it. VLASH often commits
-            before the ball is released (a premature move), so it is out of position; TEMPO uses its
-            recent-action history to hold until the right moment and time the catch. The bars beside
-            each video break that method's 50 Drop Catch rollouts into success (green) and failure
-            modes (reds); hover any segment for details.
+            A ball is dropped into the workspace and the gripper has to be under it to make the
+            catch. Because VLASH cannot perceive how the ball is moving, it falls back on constantly
+            sweeping the gripper left and right even when the ball is still or barely drifting, so it
+            is rarely in the right place when the ball comes down; TEMPO reads the recent motion and
+            closely shadows the hand, staying under the ball through the drop. The bars beside each
+            video break that method's 50 Drop Catch rollouts into success (green) and failure modes
+            (reds); hover any segment for details.
           </p>
           <div class="fmbar-legend">
             <span class="key"><i style="background:#6FB07F"></i>Success</span>
@@ -335,7 +335,6 @@
           <br>
 
           <!-- Flick Catch -->
-          <h3 class="title is-4">Flick Catch: Miss vs. Catch</h3>
           <div class="video-compare columns is-centered">
             <div class="column">
               <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH: Fails to Track</span></div>
