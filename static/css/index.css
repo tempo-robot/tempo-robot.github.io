@@ -535,3 +535,9 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 .fmbar-vtrack .fmbar-seg { width: 100%; font-size: 0.78rem; }
+
+/* Inline success-rate note under each rollout video */
+.vid-success { text-align: center; font-size: 0.9rem; color: #666; margin-top: 6px; }
+.vid-success b { font-size: 1.1rem; font-weight: 800; }
+.vid-success.ours b { color: #2E8B57; }
+.vid-success.base b { color: #C0392B; }

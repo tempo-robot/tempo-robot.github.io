@@ -77,9 +77,8 @@
     <ul>
       <li><a href="#abstract" data-target="abstract">Abstract</a></li>
       <li><a href="#tasks" data-target="tasks">Tasks</a></li>
-      <li><a href="#rollouts" data-target="rollouts">Rollouts</a></li>
-      <li><a href="#method" data-target="method">Pipeline</a></li>
-      <li><a href="#results" data-target="results">Results</a></li>
+      <li><a href="#method" data-target="method">Methodology</a></li>
+      <li><a href="#rollouts" data-target="rollouts">Results</a></li>
       <li class="nav-group">
         <a href="#analysis" data-target="analysis">Analysis</a>
         <ul class="nav-sub">
@@ -178,15 +177,46 @@
     </div>
   </section>
 
-  <!-- ==================== REAL-WORLD ROLLOUTS (demos up front) ==================== -->
+  <!-- ==================== METHODOLOGY ==================== -->
+  <section class="section" id="method">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">TEMPO Methodology</h2>
+
+          <div class="content has-text-justified method-figure">
+            <video autoplay muted playsinline controls poster="static/images/method.png"
+                   style="width:100%; border-radius:4px; display:block;">
+              <source src="static/videos/method_v2.mp4" type="video/mp4">
+            </video>
+          </div>
+
+          <div class="content has-text-justified">
+            <p>
+              TEMPO adds two compact temporal signals to a frozen VLA, each fixing one failure mode with
+              near-zero overhead and no architectural change.
+              <span class="sig-mot"><b>TEMPO<sub>MOT</sub></b></span> is an object-agnostic motion token from
+              a frozen video foundation model that summarizes how the scene is moving, fixing motion
+              ambiguity. <span class="sig-act"><b>TEMPO<sub>ACT</sub></b></span> is a compact summary of the
+              robot's recent joint history that tells the policy which task phase it is in, fixing state
+              aliasing. Motion encoding runs in a background thread, so it adds essentially no inference-time
+              cost; we give the full architecture and a latency breakdown in the paper.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== RESULTS (demos) ==================== -->
   <section class="section" id="rollouts">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column is-full-width">
-          <h2 class="title is-3">Real-World Rollouts</h2>
+          <h2 class="title is-3">Results</h2>
           <div class="content has-text-justified">
             <p>
-              Side-by-side real-robot rollouts of the same task: the asynchronous method
+              Side-by-side rollouts of the same task: the asynchronous method
               <a href="https://github.com/mit-han-lab/vlash" target="_blank" rel="noopener">VLASH</a>
               versus TEMPO. VLASH cannot tell how the scene is moving or which phase of the task it
               is in, so it mistimes the grasp or stalls entirely. TEMPO tracks the moving target and commits
@@ -194,38 +224,92 @@
             </p>
           </div>
 
-          <!-- Pair A: state aliasing -->
-          <h3 class="title is-4">State Aliasing: Stalls vs. Completes</h3>
+          <!-- Bottle Handover -->
+          <h3 class="title is-4">Bottle Handover: Miss vs. Catch</h3>
           <div class="video-compare columns is-centered">
             <div class="column">
-              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH: Aliased, Fails to Start</span></div>
+              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH: Complete Miss</span></div>
               <div class="video-wrap">
                 <video autoplay muted loop playsinline controls width="100%">
-                  <source src="static/videos/alias_baseline.mp4" type="video/mp4">
+                  <source src="static/videos/bottle_baseline.mp4" type="video/mp4">
                 </video>
+              </div>
+              <div class="vid-success base">Success rate: <b>38%</b></div>
+            </div>
+            <div class="column is-narrow fmbar-vcol">
+              <div class="fmbar-vlabel">VLASH</div>
+              <div class="fmbar-vtrack">
+                <div class="fmbar-seg" style="height:38%;background:#6FB07F" data-mode="Success" data-desc="Task completed: the bottle is caught.">19</div>
+                <div class="fmbar-seg light" style="height:10%;background:#FCBBA1" data-mode="Near Catch" data-desc="The side of the gripper grazes the bottle.">5</div>
+                <div class="fmbar-seg" style="height:16%;background:#EF3B2C" data-mode="Gripper Miss" data-desc="The gripper closes too early or too late.">8</div>
+                <div class="fmbar-seg" style="height:36%;background:#A50F15" data-mode="Complete Miss" data-desc="Robot gripper completely misses the object.">18</div>
               </div>
             </div>
             <div class="column">
-              <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours): Disambiguates, Succeeds</span></div>
+              <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours): Catches</span></div>
               <div class="video-wrap">
                 <video autoplay muted loop playsinline controls width="100%">
-                  <source src="static/videos/alias_ours.mp4" type="video/mp4">
+                  <source src="static/videos/bottle_ours.mp4" type="video/mp4">
                 </video>
+              </div>
+              <div class="vid-success ours">Success rate: <b>74%</b></div>
+            </div>
+            <div class="column is-narrow fmbar-vcol ours">
+              <div class="fmbar-vlabel">TEMPO</div>
+              <div class="fmbar-vtrack">
+                <div class="fmbar-seg" style="height:74%;background:#6FB07F" data-mode="Success" data-desc="Task completed: the bottle is caught.">37</div>
+                <div class="fmbar-seg" style="height:6%;background:#EF3B2C" data-mode="Gripper Miss" data-desc="The gripper closes too early or too late.">3</div>
+                <div class="fmbar-seg" style="height:20%;background:#A50F15" data-mode="Complete Miss" data-desc="Robot gripper completely misses the object.">10</div>
               </div>
             </div>
           </div>
           <p class="compare-caption">
-            The approach and retract phases of the gripper look nearly identical from a single frame. With
-            this state aliasing present in the demonstrations, VLASH collapses and cannot act; TEMPO's
-            proprioceptive history disambiguates the two phases, so the gripper approaches and retracts
-            normally and completes the task. See a deeper dive in
-            <a href="#state-aliasing">Why TEMPO<sub>ACT</sub> helps?</a> below.
+            Receiving a bottle from a walking person. VLASH reaches for where the bottle was and
+            misses it entirely; TEMPO estimates the bottle's velocity and times the grasp to intercept it.
+            The bars beside each video break that method's 50 Bottle Handover rollouts into success (green)
+            and failure modes (reds); hover any segment for details.
+          </p>
+          <div class="fmbar-legend">
+            <span class="key"><i style="background:#6FB07F"></i>Success</span>
+            <span class="key"><i style="background:#FCBBA1"></i>Near Catch</span>
+            <span class="key"><i style="background:#EF3B2C"></i>Gripper Miss</span>
+            <span class="key"><i style="background:#A50F15"></i>Complete Miss</span>
+          </div>
+
+          <br>
+
+          <!-- Ball Drop -->
+          <h3 class="title is-4">Ball Drop: Miss vs. Catch</h3>
+          <div class="video-compare columns is-centered">
+            <div class="column">
+              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH: Misses the Catch</span></div>
+              <div class="video-wrap">
+                <video autoplay muted loop playsinline controls width="100%">
+                  <source src="static/videos/drop_baseline.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="vid-success base">Success rate: <b>38%</b></div>
+            </div>
+            <div class="column">
+              <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours): Catches</span></div>
+              <div class="video-wrap">
+                <video autoplay muted loop playsinline controls width="100%">
+                  <source src="static/videos/drop_ours.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="vid-success ours">Success rate: <b>66%</b></div>
+            </div>
+          </div>
+          <p class="compare-caption">
+            A ball is released into the workspace and the gripper must intercept it in time. VLASH
+            reacts too late and the ball gets past the gripper; TEMPO anticipates the ball and closes
+            on it at the right moment.
           </p>
 
           <br>
 
-          <!-- Pair B: motion ambiguity / complete miss -->
-          <h3 class="title is-4">Moving Target: Miss vs. Catch</h3>
+          <!-- Flick Catch -->
+          <h3 class="title is-4">Flick Catch: Miss vs. Catch</h3>
           <div class="video-compare columns is-centered">
             <div class="column">
               <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH: Fails to Track</span></div>
@@ -234,6 +318,7 @@
                   <source src="static/videos/track_baseline.mp4" type="video/mp4">
                 </video>
               </div>
+              <div class="vid-success base">Success rate: <b>20%</b></div>
             </div>
             <div class="column is-narrow fmbar-vcol">
               <div class="fmbar-vlabel">VLASH</div>
@@ -250,6 +335,7 @@
                   <source src="static/videos/track_ours.mp4" type="video/mp4">
                 </video>
               </div>
+              <div class="vid-success ours">Success rate: <b>66%</b></div>
             </div>
             <div class="column is-narrow fmbar-vcol ours">
               <div class="fmbar-vlabel">TEMPO</div>
@@ -276,145 +362,41 @@
 
           <br>
 
-          <!-- Pair C: bottle handover -->
-          <h3 class="title is-4">Bottle Handover: Miss vs. Catch</h3>
+          <!-- State Aliasing (Flick Catch) -->
+          <h3 class="title is-4">State Aliasing: Stalls vs. Completes</h3>
           <div class="video-compare columns is-centered">
             <div class="column">
-              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH: Complete Miss</span></div>
+              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH: Aliased, Fails to Start</span></div>
               <div class="video-wrap">
                 <video autoplay muted loop playsinline controls width="100%">
-                  <source src="static/videos/bottle_baseline.mp4" type="video/mp4">
+                  <source src="static/videos/alias_baseline.mp4" type="video/mp4">
                 </video>
               </div>
-            </div>
-            <div class="column is-narrow fmbar-vcol">
-              <div class="fmbar-vlabel">VLASH</div>
-              <div class="fmbar-vtrack">
-                <div class="fmbar-seg" style="height:38%;background:#6FB07F" data-mode="Success" data-desc="Task completed: the bottle is caught.">19</div>
-                <div class="fmbar-seg light" style="height:10%;background:#FCBBA1" data-mode="Near Catch" data-desc="The side of the gripper grazes the bottle.">5</div>
-                <div class="fmbar-seg" style="height:16%;background:#EF3B2C" data-mode="Gripper Miss" data-desc="The gripper closes too early or too late.">8</div>
-                <div class="fmbar-seg" style="height:36%;background:#A50F15" data-mode="Complete Miss" data-desc="Robot gripper completely misses the object.">18</div>
-              </div>
+              <div class="vid-success base">Success rate: <b>0%</b></div>
             </div>
             <div class="column">
-              <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours): Catches</span></div>
+              <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours): Disambiguates, Succeeds</span></div>
               <div class="video-wrap">
                 <video autoplay muted loop playsinline controls width="100%">
-                  <source src="static/videos/bottle_ours.mp4" type="video/mp4">
+                  <source src="static/videos/alias_ours.mp4" type="video/mp4">
                 </video>
               </div>
-            </div>
-            <div class="column is-narrow fmbar-vcol ours">
-              <div class="fmbar-vlabel">TEMPO</div>
-              <div class="fmbar-vtrack">
-                <div class="fmbar-seg" style="height:74%;background:#6FB07F" data-mode="Success" data-desc="Task completed: the bottle is caught.">37</div>
-                <div class="fmbar-seg" style="height:6%;background:#EF3B2C" data-mode="Gripper Miss" data-desc="The gripper closes too early or too late.">3</div>
-                <div class="fmbar-seg" style="height:20%;background:#A50F15" data-mode="Complete Miss" data-desc="Robot gripper completely misses the object.">10</div>
-              </div>
+              <div class="vid-success ours">Success rate: <b>68%</b></div>
             </div>
           </div>
           <p class="compare-caption">
-            Receiving a bottle from a walking person. VLASH reaches for where the bottle was and
-            misses it entirely; TEMPO estimates the bottle's velocity and times the grasp to intercept it.
-            The bars beside each video break that method's 50 Bottle Handover rollouts into success (green)
-            and failure modes (reds); hover any segment for details.
+            The approach and retract phases of the gripper look nearly identical from a single frame. With
+            this state aliasing present in the demonstrations, VLASH collapses and cannot act; TEMPO's
+            proprioceptive history disambiguates the two phases, so the gripper approaches and retracts
+            normally and completes the task. See a deeper dive in
+            <a href="#state-aliasing">Why TEMPO<sub>ACT</sub> helps?</a> below.
           </p>
-          <div class="fmbar-legend">
-            <span class="key"><i style="background:#6FB07F"></i>Success</span>
-            <span class="key"><i style="background:#FCBBA1"></i>Near Catch</span>
-            <span class="key"><i style="background:#EF3B2C"></i>Gripper Miss</span>
-            <span class="key"><i style="background:#A50F15"></i>Complete Miss</span>
-          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== METHOD ==================== -->
-  <section class="section" id="method">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h2 class="title is-3">TEMPO Pipeline</h2>
 
-          <div class="content has-text-justified method-figure">
-            <video autoplay muted playsinline controls poster="static/images/method.png"
-                   style="width:100%; border-radius:4px; display:block;">
-              <source src="static/videos/method_v2.mp4" type="video/mp4">
-            </video>
-          </div>
-
-          <div class="content has-text-justified">
-            <p>
-              TEMPO adds two compact temporal signals to a frozen VLA, each fixing one failure mode with
-              near-zero overhead and no architectural change.
-              <span class="sig-mot"><b>TEMPO<sub>MOT</sub></b></span> is an object-agnostic motion token from
-              a frozen video foundation model that summarizes how the scene is moving, fixing motion
-              ambiguity. <span class="sig-act"><b>TEMPO<sub>ACT</sub></b></span> is a compact summary of the
-              robot's recent joint history that tells the policy which task phase it is in, fixing state
-              aliasing. Motion encoding runs in a background thread, so it adds essentially no inference-time
-              cost; we give the full architecture and a latency breakdown in the paper.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== RESULTS ==================== -->
-  <section class="section" id="results">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h2 class="title is-3">Results</h2>
-          <div class="content has-text-justified">
-            <p>
-              We compare TEMPO against two asynchronous methods, RTC and VLASH, designed for responsive
-              execution. Each entry is the percentage of 50 real-robot rollouts in which the policy completes
-              the task, evaluated under varied object speeds, appearances, and approach directions. For Wine
-              Pour we report the percentage of "wine" mass retained in the pot at the end of the pour.
-            </p>
-          </div>
-          <div class="content">
-            <table class="results-table" style="max-width: 760px; margin: 0 auto;">
-              <thead>
-                <tr>
-                  <th>Method</th>
-                  <th>Drop Catch</th>
-                  <th>Bottle Handover</th>
-                  <th>Flick Catch</th>
-                  <th>Wine Pour</th>
-                  <th>Average</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>RTC</td>
-                  <td><b>80%</b></td><td>44%</td><td>48%</td><td>80.8%</td><td>63.2%</td>
-                </tr>
-                <tr>
-                  <td>VLASH</td>
-                  <td>38%</td><td>38%</td><td>20%</td><td>94.0%</td><td>47.5%</td>
-                </tr>
-                <tr class="ours-row">
-                  <td><b>TEMPO (Ours)</b></td>
-                  <td>66%</td><td><b>74%</b></td><td><b>66%</b></td><td><b>98.1%</b></td><td><b>76.0%</b></td>
-                </tr>
-              </tbody>
-            </table>
-            <p class="has-text-justified" style="margin-top:0.75rem;">
-              On Drop Catch, where execution timing dominates over representation, TEMPO is competitive with
-              the timing-focused RTC. On tasks where the target's motion is more uncertain or the object of
-              interest shifts, TEMPO consistently outperforms both RTC and VLASH, including a
-              <span class="improvement">+30%</span> gain on Bottle Handover and
-              <span class="improvement">+18%</span> on Flick Catch.
-            </p>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ==================== ANALYSIS ==================== -->
   <section class="section" id="analysis">
