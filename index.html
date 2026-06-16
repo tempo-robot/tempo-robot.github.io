@@ -56,8 +56,8 @@
     .ax-proof{margin-top:18px;}
     #axCurve{width:100%;height:auto;display:block;
              background:#fafafa;border:1px solid #ececec;border-radius:8px;}
-    .ax-axislabel{font-size:11px;fill:#999;}
-    .ax-ylabel{font-size:12px;fill:#333;font-weight:600;}
+    .ax-axistitle{font-size:15px;fill:#333;font-weight:600;}
+    .ax-tick{font-size:12px;fill:#888;}
     .ax-caption{font-size:.9rem;color:#444;line-height:1.5;margin-top:14px;}
     .ax-caption b.g{color:#2E8B57;} .ax-caption b.r{color:#C0392B;}
     @media (max-width:620px){
@@ -516,7 +516,7 @@
               </div>
             </div>
             <div class="ax-proof">
-              <svg id="axCurve" viewBox="0 0 1000 240" preserveAspectRatio="none"></svg>
+              <svg id="axCurve" viewBox="0 0 1000 280" preserveAspectRatio="none"></svg>
             </div>
           </div>
 
@@ -656,7 +656,7 @@
     const $=id=>document.getElementById(id);
     const svg=$("axCurve"); if(!svg) return;
     const SVGNS="http://www.w3.org/2000/svg";
-    const W=1000,H=240,PX=46,PYt=16,PYb=34;
+    const W=1000,H=280,PX=60,PYt=16,PYb=52;
     const xOf=i=>PX + (D.n<=1?0:i/(D.n-1))*(W-2*PX);
     const yOf=a=>H-PYb - a*(H-PYt-PYb);
     const el=(tag,attrs)=>{const e=document.createElementNS(SVGNS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e;};
@@ -675,15 +675,35 @@
 
     function buildCurve(A,B){
       svg.innerHTML="";
-      for(const a of [0,0.5,1]) svg.appendChild(el("line",{x1:PX,y1:yOf(a),x2:W-PX,y2:yOf(a),stroke:"#ececec","stroke-width":1}));
-      let ya=el("text",{x:16,y:H/2,class:"ax-ylabel",transform:`rotate(-90 16 ${H/2})`,"text-anchor":"middle"});
-      ya.textContent=(D.ui&&D.ui.yaxis)||"EEF distance from start position";svg.appendChild(ya);
-      let xa=el("text",{x:W/2,y:H-6,class:"ax-axislabel","text-anchor":"middle"});xa.textContent="time";svg.appendChild(xa);
+      const x0=PX, x1=W-PX, yb=yOf(0), yt=yOf(1);
+      // y gridlines + ticks (normalized 0..1)
+      for(const a of [0,0.5,1]){
+        const y=yOf(a);
+        svg.appendChild(el("line",{x1:x0,y1:y,x2:x1,y2:y,stroke:"#eee","stroke-width":1}));
+        svg.appendChild(el("line",{x1:x0-5,y1:y,x2:x0,y2:y,stroke:"#999","stroke-width":1}));
+        const t=el("text",{x:x0-9,y:y+4,class:"ax-tick","text-anchor":"end"});t.textContent=a.toFixed(1);svg.appendChild(t);
+      }
+      // x ticks (time, seconds)
+      const maxT=D.t[D.n-1]||1, step=maxT>24?6:(maxT>12?4:2);
+      for(let T=0;T<=maxT+1e-6;T+=step){
+        const x=x0+(T/maxT)*(x1-x0);
+        svg.appendChild(el("line",{x1:x,y1:yb,x2:x,y2:yb+5,stroke:"#999","stroke-width":1}));
+        const t=el("text",{x:x,y:yb+20,class:"ax-tick","text-anchor":"middle"});t.textContent=String(Math.round(T));svg.appendChild(t);
+      }
+      // axis lines
+      svg.appendChild(el("line",{x1:x0,y1:yt,x2:x0,y2:yb,stroke:"#444","stroke-width":1.5}));
+      svg.appendChild(el("line",{x1:x0,y1:yb,x2:x1,y2:yb,stroke:"#444","stroke-width":1.5}));
+      // axis titles
+      const ym=(yt+yb)/2;
+      const ya=el("text",{x:17,y:ym,class:"ax-axistitle",transform:`rotate(-90 17 ${ym})`,"text-anchor":"middle"});
+      ya.textContent="EEF distance from start";svg.appendChild(ya);
+      const xa=el("text",{x:(x0+x1)/2,y:H-8,class:"ax-axistitle","text-anchor":"middle"});xa.textContent="time (s)";svg.appendChild(xa);
+      // curve
       svg.appendChild(el("polyline",{points:D.app.map((a,i)=>xOf(i)+","+yOf(a)).join(" "),fill:"none",stroke:"#cfcfcf","stroke-width":1.4}));
       for(let i=0;i<D.n;i++) svg.appendChild(el("circle",{cx:xOf(i),cy:yOf(D.app[i]),r:2.4,fill:pColor(i),"fill-opacity":.85}));
+      // shared-EEF reference line through the two highlighted moments (connector removed)
       const ymid=yOf((D.app[A]+D.app[B])/2);
-      svg.appendChild(el("line",{x1:PX,y1:ymid,x2:W-PX,y2:ymid,stroke:"#b0b0b0","stroke-width":1,"stroke-dasharray":"3 4"}));
-      svg.appendChild(el("line",{x1:xOf(A),y1:yOf(D.app[A]),x2:xOf(B),y2:yOf(D.app[B]),stroke:"#333","stroke-width":1.6,"stroke-dasharray":"5 4"}));
+      svg.appendChild(el("line",{x1:x0,y1:ymid,x2:x1,y2:ymid,stroke:"#b0b0b0","stroke-width":1,"stroke-dasharray":"3 4"}));
       svg.appendChild(el("circle",{cx:xOf(B),cy:yOf(D.app[B]),r:7,fill:pColor(B),stroke:"#000","stroke-width":1.5}));
       svg.appendChild(el("circle",{cx:xOf(A),cy:yOf(D.app[A]),r:7.5,fill:pColor(A),stroke:"#000","stroke-width":2}));
     }
