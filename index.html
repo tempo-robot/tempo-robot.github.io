@@ -736,9 +736,12 @@
       const xa=el("text",{x:(x0+x1)/2,y:H-8,class:"ax-axistitle","text-anchor":"middle"});xa.textContent="time (s)";svg.appendChild(xa);
       // curve
       svg.appendChild(el("polyline",{points:D.app.map((a,i)=>xOf(i)+","+yOf(a)).join(" "),fill:"none",stroke:"#cfcfcf","stroke-width":1.4}));
-      const NEUTRAL="#d8d8d8", NEAR=7;  // color a visible cluster around the two highlighted moments
+      const NEUTRAL="#d8d8d8";  // green = rising trend into the 1st point; red = drop after the 2nd point
+      const GBACK=11, GFWD=3, RBACK=3, RFWD=11;
       for(let i=0;i<D.n;i++){
-        const near = Math.abs(i-A)<=NEAR ? POS : (Math.abs(i-B)<=NEAR ? NEG : null);
+        const inG = i>=A-GBACK && i<=A+GFWD;
+        const inR = i>=B-RBACK && i<=B+RFWD;
+        const near = inG ? POS : (inR ? NEG : null);
         svg.appendChild(el("circle",{cx:xOf(i),cy:yOf(D.app[i]),
           r: near?4:2, fill: near||NEUTRAL, "fill-opacity": near?1:.45}));
       }
