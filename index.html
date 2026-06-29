@@ -736,12 +736,17 @@
       const xa=el("text",{x:(x0+x1)/2,y:H-8,class:"ax-axistitle","text-anchor":"middle"});xa.textContent="time (s)";svg.appendChild(xa);
       // curve
       svg.appendChild(el("polyline",{points:D.app.map((a,i)=>xOf(i)+","+yOf(a)).join(" "),fill:"none",stroke:"#cfcfcf","stroke-width":1.4}));
-      for(let i=0;i<D.n;i++) svg.appendChild(el("circle",{cx:xOf(i),cy:yOf(D.app[i]),r:2.4,fill:pColor(i),"fill-opacity":.85}));
+      const NEUTRAL="#cfcfcf", NEAR=2;  // color only a small cluster around the two highlighted moments
+      for(let i=0;i<D.n;i++){
+        let f=NEUTRAL;
+        if(Math.abs(i-A)<=NEAR) f=POS; else if(Math.abs(i-B)<=NEAR) f=NEG;
+        svg.appendChild(el("circle",{cx:xOf(i),cy:yOf(D.app[i]),r:2.4,fill:f,"fill-opacity":.85}));
+      }
       // shared-EEF reference line through the two highlighted moments (connector removed)
       const ymid=yOf((D.app[A]+D.app[B])/2);
       svg.appendChild(el("line",{x1:x0,y1:ymid,x2:x1,y2:ymid,stroke:"#b0b0b0","stroke-width":1,"stroke-dasharray":"3 4"}));
-      svg.appendChild(el("circle",{cx:xOf(B),cy:yOf(D.app[B]),r:7,fill:pColor(B),stroke:"#000","stroke-width":1.5}));
-      svg.appendChild(el("circle",{cx:xOf(A),cy:yOf(D.app[A]),r:7.5,fill:pColor(A),stroke:"#000","stroke-width":2}));
+      svg.appendChild(el("circle",{cx:xOf(B),cy:yOf(D.app[B]),r:7,fill:NEG,stroke:"#000","stroke-width":1.5}));
+      svg.appendChild(el("circle",{cx:xOf(A),cy:yOf(D.app[A]),r:7.5,fill:POS,stroke:"#000","stroke-width":2}));
     }
 
     let playing=false;
