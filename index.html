@@ -387,6 +387,35 @@
 
           <br>
 
+          <!-- Wine Pour -->
+          <div class="video-compare columns is-centered is-vcentered">
+            <div class="column">
+              <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH: Spills More</span></div>
+              <div class="video-wrap">
+                <video autoplay muted loop playsinline controls width="100%">
+                  <source src="static/videos/pour_vlash.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="vid-success base">Wine retained: <b>94.0%</b></div>
+            </div>
+            <div class="column">
+              <div class="vid-label-wrap"><span class="vid-label vid-label-ours">TEMPO (Ours): Clean Pour</span></div>
+              <div class="video-wrap">
+                <video autoplay muted loop playsinline controls width="100%">
+                  <source src="static/videos/pour_tempo.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="vid-success ours">Wine retained: <b>98.1%</b></div>
+            </div>
+          </div>
+          <p class="compare-caption">
+            The robot pours beads into a pot the human keeps moving; success is the percentage of beads
+            retained in the pot. Both methods complete the pour, but VLASH lags the moving pot and spills
+            more, while TEMPO tracks the pot and pours cleanly.
+          </p>
+
+          <br>
+
           <!-- State Aliasing (Flick Catch) -->
           <h3 class="title is-4">State Aliasing: Stalls vs. Completes</h3>
           <div class="video-compare columns is-centered">
