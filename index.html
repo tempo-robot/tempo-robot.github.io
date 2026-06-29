@@ -736,12 +736,14 @@
       const xa=el("text",{x:(x0+x1)/2,y:H-8,class:"ax-axistitle","text-anchor":"middle"});xa.textContent="time (s)";svg.appendChild(xa);
       // curve
       svg.appendChild(el("polyline",{points:D.app.map((a,i)=>xOf(i)+","+yOf(a)).join(" "),fill:"none",stroke:"#cfcfcf","stroke-width":1.4}));
-      const NEUTRAL="#d8d8d8";  // green = rising trend into the 1st point; red = drop after the 2nd point
-      const GBACK=11, GFWD=3, RBACK=3, RFWD=11;
+      const NEUTRAL="#d8d8d8";  // green = full reach-in ramp up to 1st point; red = full retract ramp after 2nd point
+      const ap=D.app; let peak=0; for(let i=1;i<D.n;i++) if(ap[i]>ap[peak]) peak=i;
+      let vB=0; for(let i=1;i<=peak;i++) if(ap[i]<ap[vB]) vB=i;            // valley before the peak (start of reach-in)
+      let vA=peak; for(let i=peak;i<D.n;i++) if(ap[i]<ap[vA]) vA=i;        // valley after the peak (end of retract)
+      const gLo=Math.min(vB,A), gHi=Math.max(vB,A);                       // green ramp into the 1st point
+      const rLo=Math.min(B,vA), rHi=Math.max(B,vA);                       // red ramp out of the 2nd point
       for(let i=0;i<D.n;i++){
-        const inG = i>=A-GBACK && i<=A+GFWD;
-        const inR = i>=B-RBACK && i<=B+RFWD;
-        const near = inG ? POS : (inR ? NEG : null);
+        const near = (i>=gLo && i<=gHi) ? POS : ((i>=rLo && i<=rHi) ? NEG : null);
         svg.appendChild(el("circle",{cx:xOf(i),cy:yOf(D.app[i]),
           r: near?4:2, fill: near||NEUTRAL, "fill-opacity": near?1:.45}));
       }
