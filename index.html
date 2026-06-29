@@ -736,11 +736,11 @@
       const xa=el("text",{x:(x0+x1)/2,y:H-8,class:"ax-axistitle","text-anchor":"middle"});xa.textContent="time (s)";svg.appendChild(xa);
       // curve
       svg.appendChild(el("polyline",{points:D.app.map((a,i)=>xOf(i)+","+yOf(a)).join(" "),fill:"none",stroke:"#cfcfcf","stroke-width":1.4}));
-      const NEUTRAL="#cfcfcf", NEAR=2;  // color only a small cluster around the two highlighted moments
+      const NEUTRAL="#d8d8d8", NEAR=7;  // color a visible cluster around the two highlighted moments
       for(let i=0;i<D.n;i++){
-        let f=NEUTRAL;
-        if(Math.abs(i-A)<=NEAR) f=POS; else if(Math.abs(i-B)<=NEAR) f=NEG;
-        svg.appendChild(el("circle",{cx:xOf(i),cy:yOf(D.app[i]),r:2.4,fill:f,"fill-opacity":.85}));
+        const near = Math.abs(i-A)<=NEAR ? POS : (Math.abs(i-B)<=NEAR ? NEG : null);
+        svg.appendChild(el("circle",{cx:xOf(i),cy:yOf(D.app[i]),
+          r: near?4:2, fill: near||NEUTRAL, "fill-opacity": near?1:.45}));
       }
       // shared-EEF reference line through the two highlighted moments (connector removed)
       const ymid=yOf((D.app[A]+D.app[B])/2);
