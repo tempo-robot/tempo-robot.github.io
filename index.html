@@ -142,21 +142,26 @@
           <h2 class="title is-3">Abstract</h2>
           <div class="content has-text-justified abstract-text">
             <p>
-              Vision-Language-Action (VLA) models are conditioned on a single observation at inference
-              time, a design that suffices for quasi-static manipulation but creates two representational
-              failures in dynamic settings. The first is <b>motion ambiguity</b>: a snapshot encodes
-              configuration, not how the scene is evolving, so the policy cannot anticipate where a moving
-              target will be. The second is <b>state aliasing</b>: perceptually similar observations at
-              different task phases can demand opposite actions, producing jitter and mistimed commitments
-              even on tasks the policy nominally understands.
+              Vision-language-action (VLA) models have achieved impressive performance in quasi-static
+              manipulation, but struggle in dynamic manipulation tasks because they operate on a single
+              observation at inference time. We identify two representational failures that underlie this
+              limitation. The first is <b>motion ambiguity</b>, where a single observation does not include
+              scene dynamics and therefore cannot anticipate the future state of moving objects. The second
+              is <b>state aliasing</b>, where visually similar observations from different points in a task
+              require different actions. We show that these failures persist regardless of model scale and
+              inference latency, proving that the bottleneck is missing temporal context rather than model
+              capacity.
             </p>
             <p>
-              We show that these two failures are separable and that each has a natural fix. A motion
-              summary from a frozen video foundation model separates scene dynamics from appearance
-              without task-specific supervision, while a compact proprioceptive history disambiguates
-              sequential task phases without per-task engineering. <b>TEMPO</b> adds these as minimal
-              inputs to a pretrained VLA without architectural modification, together adding only 2M
-              parameters (0.08% overhead) and leaving the backbone entirely intact.
+              Based on this insight, we propose <b>TEMPO</b>, which augments a pretrained VLA with two
+              temporal inputs: a motion summary extracted from a frozen video foundation model to resolve
+              motion ambiguity and a compact proprioceptive history to resolve state aliasing. TEMPO requires
+              no modification to the backbone and adds minimal compute overhead at training or deployment.
+              Across four dynamic manipulation tasks, it improves Bottle Handover success from 44% to 74% and
+              is the only method that solves state aliasing. Probing and ablation studies confirm that each
+              temporal signal independently addresses its corresponding failure. We further release
+              <b>TEMPO-Bench</b>, a benchmark of over 50k annotated frames for evaluating motion-aware robot
+              perception in both regression and multiple-choice formats.
             </p>
           </div>
         </div>
