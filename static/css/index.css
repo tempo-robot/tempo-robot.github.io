@@ -541,3 +541,37 @@ body {
 .vid-success b { font-size: 1.1rem; font-weight: 800; }
 .vid-success.ours b { color: #2E8B57; }
 .vid-success.base b { color: #C0392B; }
+
+/* "hover" vs "tap" wording in captions, by input type */
+.on-touch { display: none; }
+@media (hover: none) {
+  .on-hover { display: none; }
+  .on-touch { display: inline; }
+}
+
+/* ===== Mobile: keep each breakdown bar beside its video ===== */
+@media screen and (max-width: 768px) {
+  /* Bulma stacks columns below 769px; re-enable a wrapping row so each
+     video + bar pair shares one line (video fills what the bar leaves). */
+  .video-compare.has-fmbar {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .video-compare.has-fmbar > .column:not(.fmbar-vcol) {
+    flex: 0 0 calc(100% - 52px);
+    max-width: calc(100% - 52px);
+    min-width: 0;
+    padding-right: 0.4rem;
+  }
+  .video-compare.has-fmbar > .fmbar-vcol {
+    flex: 0 0 52px;
+    width: 52px;
+    padding: 0.6rem 0 0.6rem 4px;
+  }
+  .fmbar-vtrack { width: 40px; min-height: 0; }
+  .fmbar-vtrack .fmbar-seg { font-size: 0.72rem; }
+  .fmbar-vlabel { font-size: 0.72rem; }
+  .fmbar-seg { cursor: pointer; }
+
+  .attn-video { max-width: 100% !important; }
+}

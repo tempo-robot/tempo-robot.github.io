@@ -65,6 +65,8 @@
       .ax-card{flex:1 1 100%;}
       .ax-vs{flex:1 1 100%;order:3;padding-top:6px;flex-direction:row;gap:14px;}
       .ax-vs .perp{margin:0;}
+      .ax-axistitle{font-size:18px;}
+      .ax-tick{font-size:16px;}
     }
   </style>
 </head>
@@ -271,7 +273,7 @@
           </div>
 
           <!-- Bottle Handover -->
-          <div class="video-compare columns is-centered">
+          <div class="video-compare has-fmbar columns is-centered">
             <div class="column">
               <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH: Complete Miss</span></div>
               <div class="video-wrap">
@@ -318,13 +320,13 @@
             Receiving a bottle from a walking person. VLASH reaches for where the bottle was and
             misses it entirely; TEMPO estimates the bottle's velocity and times the grasp to intercept it.
             The bars beside each video break that method's 50 Bottle Handover rollouts into success (green)
-            and failure modes (reds); hover any segment for details.
+            and failure modes (reds); <span class="on-hover">hover</span><span class="on-touch">tap</span> any segment for details.
           </p>
 
           <br>
 
           <!-- Ball Drop -->
-          <div class="video-compare columns is-centered">
+          <div class="video-compare has-fmbar columns is-centered">
             <div class="column">
               <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH: Misses the Catch</span></div>
               <div class="video-wrap">
@@ -375,13 +377,13 @@
             is rarely in the right place when the ball comes down; TEMPO reads the recent motion and
             closely shadows the hand, staying under the ball through the drop. The bars beside each
             video break that method's 50 Drop Catch rollouts into success (green) and failure modes
-            (reds); hover any segment for details.
+            (reds); <span class="on-hover">hover</span><span class="on-touch">tap</span> any segment for details.
           </p>
 
           <br>
 
           <!-- Flick Catch -->
-          <div class="video-compare columns is-centered">
+          <div class="video-compare has-fmbar columns is-centered">
             <div class="column">
               <div class="vid-label-wrap"><span class="vid-label vid-label-baseline">VLASH: Fails to Track</span></div>
               <div class="video-wrap">
@@ -428,7 +430,7 @@
             VLASH never picks up the object's motion, so its gripper fails to follow the ball and the
             catch is missed. TEMPO learns the object-motion-to-action correspondence, tracks the appropriate
             target, and catches it on time. The bars beside each video break that method's 50 Flick Catch
-            rollouts into success (green) and per-stage failures (reds); hover any segment for details.
+            rollouts into success (green) and per-stage failures (reds); <span class="on-hover">hover</span><span class="on-touch">tap</span> any segment for details.
           </p>
 
           <br>
@@ -507,7 +509,7 @@
           <div class="content has-text-centered">
             <video autoplay muted loop playsinline controls preload="auto"
                    aria-label="Attention mass over an episode"
-                   style="max-width: 85%; display: block; margin: 0 auto; border-radius: 4px;">
+                   class="attn-video" style="max-width: 85%; display: block; margin: 0 auto; border-radius: 4px;">
               <source src="static/videos/spartan_trimmed_ep5_v3.mp4" type="video/mp4">
             </video>
             <p class="has-text-justified">
@@ -732,6 +734,24 @@
             fmTip.style.opacity = '0';
           });
         });
+
+        // Touch screens have no hover: tap a segment to show its tooltip,
+        // tap elsewhere or scroll to hide it.
+        if (window.matchMedia('(hover: none)').matches) {
+          const hideTip = () => { fmTip.style.opacity = '0'; };
+          document.querySelectorAll('.fmbar-seg').forEach(seg => {
+            seg.addEventListener('click', e => {
+              e.stopPropagation();
+              fmTip.innerHTML = '<b>' + seg.dataset.mode + '</b><br>' + seg.dataset.desc;
+              const half = Math.min(120, fmTip.offsetWidth / 2) + 8;
+              fmTip.style.left = Math.max(half, Math.min(window.innerWidth - half, e.clientX)) + 'px';
+              fmTip.style.top = e.clientY + 'px';
+              fmTip.style.opacity = '1';
+            });
+          });
+          document.addEventListener('click', hideTip);
+          window.addEventListener('scroll', hideTip, { passive: true });
+        }
       }
     });
   </script>
@@ -744,7 +764,11 @@
     const $=id=>document.getElementById(id);
     const svg=$("axCurve"); if(!svg) return;
     const SVGNS="http://www.w3.org/2000/svg";
-    const W=1000,H=280,PX=60,PYt=16,PYb=52;
+    // Narrower drawing on phones so axis text is not scaled down to ~4px
+    let W=1000; const H=280,PX=60,PYt=16,PYb=52;
+    const fitWidth=()=>{ W = svg.clientWidth && svg.clientWidth<620 ? 560 : 1000;
+                         svg.setAttribute("viewBox","0 0 "+W+" "+H); };
+    fitWidth();
     const xOf=i=>PX + (D.n<=1?0:i/(D.n-1))*(W-2*PX);
     const yOf=a=>H-PYb - a*(H-PYt-PYb);
     const el=(tag,attrs)=>{const e=document.createElementNS(SVGNS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e;};
@@ -824,6 +848,8 @@
         buildCurve(A,B);
       }).catch(()=>{});
     }
+    window.addEventListener("resize",()=>{ const w=W; fitWidth();
+      if(D && W!==w){ const [A,B]=D.showcase; buildCurve(A,B); } });
     $("axPlayBtn").addEventListener("click",()=>setPlaying(!playing));
     document.querySelectorAll('.ax-task').forEach(b=>b.addEventListener('click',()=>loadTask(b.dataset.task)));
     loadTask("pour");
